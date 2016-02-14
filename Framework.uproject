@@ -1,0 +1,27 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{A7D4BA07-46D0-429E-F063-639571FFF436}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Framework",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Core",
+				"Engine",
+				"CoreUObject",
+				"InputCore",
+				"RHI",
+				"RenderCore",
+				"ShaderCore"
+			]
+		}
+	],
+	"TargetPlatforms": [
+		"PS4",
+		"WindowsNoEditor",
+		"XboxOne"
+	]
+}
