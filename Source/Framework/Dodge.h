@@ -17,6 +17,7 @@ class FRAMEWORK_API UDodge : public UObject, public IAction {
 	GENERATED_BODY()
 
 	UAnimSequence* Animation;
+	FExecuteEvent ExecuteEvent;
 
 public:
 	UDodge();
@@ -27,6 +28,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	void Execute(ABaseCharacter* Executor) override;
 
-	
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	TArray<TMulticastScriptDelegate*> GetEvents() override;
 
 };
