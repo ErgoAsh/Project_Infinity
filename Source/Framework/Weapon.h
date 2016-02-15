@@ -12,15 +12,21 @@ UCLASS()
 class FRAMEWORK_API AWeapon : public AItem {
 
 	GENERATED_BODY()
-	
-public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
+
+	UPROPERTY(VisibleAnywhere, Category = "Item")
 	bool bUseDefaultTraceMethod;
 
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	UAnimationAsset* Animation;
+
+public:
 	AWeapon();
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	FHitResult Trace(const FVector& StartTrace, const FVector& EndTrace);
+
+	UFUNCTION(BlueprintCallable, Category = "Item")	
+	UAnimationAsset* GetAnimation();
 
 	void TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
 
