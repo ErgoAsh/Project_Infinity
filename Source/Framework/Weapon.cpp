@@ -61,3 +61,7 @@ FHitResult AWeapon::Trace(const FVector& StartTrace, const FVector& EndTrace) {
 
 	return Result;
 }
+
+UAnimationAsset* GetAnimation() {
+return Animation;
+}
