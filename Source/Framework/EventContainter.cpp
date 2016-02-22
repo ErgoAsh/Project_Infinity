@@ -7,9 +7,4 @@ UEventContainer::UEventContainer(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) {
 }
 
-TArray<TMulticastScriptDelegate*> IEventContainer::GetEvents() {
-	unimplemented();
-	return TArray();
-}
-
 

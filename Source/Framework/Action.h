@@ -4,31 +4,34 @@
 
 #include "Object.h"
 #include "BaseCharacter.h"
+#include "MultiEventContainer.h"
 #include "Action.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
 
 /**
  * 
  */
 UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
-class UAction : public UInterface, public IEventContainer {
+class UAction : public UInterface {
 
 	GENERATED_UINTERFACE_BODY()
 
 };
 
-class FRAMEWORK_API IAction {
+class FRAMEWORK_API IAction : public IInterface, public IMultiEventContainer {
 
 	GENERATED_IINTERFACE_BODY()
 
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	virtual UAnimationAsset* GetAnimation();
+	virtual UAnimationAsset* GetAnimation() = 0;
 
 	//DECLARE_EVENT_OneParam(IAction, FExecuteEvent, UAnimInstance*)
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	virtual void Execute(ABaseCharacter* Executor);
+	virtual void Execute(ABaseCharacter* Executor) = 0;
+	
 	
 };

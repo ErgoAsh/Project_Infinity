@@ -11,7 +11,7 @@
 #include "ActiveSkill.generated.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
 
 /**
  * 
@@ -38,6 +38,6 @@ public:
 	virtual void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<TMulticastScriptDelegate*> GetEvents() override;
+	TArray<TDelegateInstanceInterface*> GetEvents();
 
 };

@@ -4,7 +4,9 @@
 
 #include "Object.h"
 #include "Action.h"
+#include "ScriptDelegates.h"
 #include "Dodge.generated.h"
+
 
 class ABaseCharacter;
 
@@ -18,6 +20,7 @@ class FRAMEWORK_API UDodge : public UObject, public IAction {
 
 	UAnimSequence* Animation;
 	FExecuteEvent ExecuteEvent;
+	FExecuteEndEvent ExecuteEndEvent;
 
 public:
 	UDodge();
@@ -29,6 +32,6 @@ public:
 	void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<TMulticastScriptDelegate*> GetEvents() override;
+	TArray<IDelegateInstance*> GetEvents() override;
 
 };

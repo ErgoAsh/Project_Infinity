@@ -21,8 +21,8 @@ void UActiveSkill::Execute(ABaseCharacter* Executor) {
 	//TODO wait for sth and broadcast ExecuteEndEvent
 }
 
-TArray<TMulticastScriptDelegate*> UActiveSkill::GetEvents() {
-	TArray<TMulticastScriptDelegate*> Events;
+TArray<TDelegateInstanceInterface*> UActiveSkill::GetEvents() {
+	TArray<TDelegateInstanceInterface*> Events;
 	Events.Add(ExecuteEvent);
 	Events.Add(ExecuteEndEvent);
 	return Events;

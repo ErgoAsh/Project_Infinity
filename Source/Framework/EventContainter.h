@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Object.h"
+#include "IDelegateInstance.h"
 #include "EventContainter.generated.h"
 
 /**
@@ -21,6 +22,6 @@ class FRAMEWORK_API IEventContainer {
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Event")
-	TArray<TMulticastScriptDelegate*> GetEvents();
+	virtual IDelegateInstance* GetEvent() = 0;
 	
 };

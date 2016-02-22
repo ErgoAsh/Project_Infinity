@@ -32,8 +32,9 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-TArray<TMulticastScriptDelegate*> UActiveSkill::GetEvents() {
-	TArray<TMulticastScriptDelegate*> Events;
+TArray<IDelegateInstance*> UDodge::GetEvents() {
+	TArray<IDelegateInstance*> Events;
 	Events.Add(ExecuteEvent);
+	Events.Add(ExecuteEndEvent);
 	return Events;
 }

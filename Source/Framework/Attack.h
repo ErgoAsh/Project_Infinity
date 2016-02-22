@@ -9,7 +9,7 @@
  * 
  */
 UCLASS()
-class FRAMEWORK_API UAttack : public UObject {
+class FRAMEWORK_API UAttack : public UObject, public IAction {
 
 	GENERATED_BODY()
 	
@@ -26,6 +26,6 @@ public:
 	void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<TMulticastScriptDelegate*> GetEvents() override;
+	TArray<IDelegateInstance*> GetEvents() override;
 
 };

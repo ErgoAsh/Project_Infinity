@@ -9,12 +9,12 @@
  * 
  */
 UCLASS()
-class FRAMEWORK_API UEffect : public UObject {
+class FRAMEWORK_API UEffect : public IConsequence {
 
 	GENERATED_BODY()
 
+
+
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Visual")
-	TAssetPtr<UParticleEmitter> Particle;
 	
 };
