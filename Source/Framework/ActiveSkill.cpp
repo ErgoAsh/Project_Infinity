@@ -4,7 +4,6 @@
 #include "ActiveSkill.h"
 #include "Animation/SkeletalMeshActor.h"
 #include "Engine.h"
-#include "ScriptDelegates.h"
 
 void UActiveSkill::Execute(ABaseCharacter* Executor) {
 	if (Executor) {
@@ -21,11 +20,8 @@ void UActiveSkill::Execute(ABaseCharacter* Executor) {
 	//TODO wait for sth and broadcast ExecuteEndEvent
 }
 
-TArray<TDelegateInstanceInterface*> UActiveSkill::GetEvents() {
-	TArray<TDelegateInstanceInterface*> Events;
-	Events.Add(ExecuteEvent);
-	Events.Add(ExecuteEndEvent);
-	return Events;
+FExecuteEvent UActiveSkill::GetEvent() {
+	return ExecuteEvent;
 }
 
 

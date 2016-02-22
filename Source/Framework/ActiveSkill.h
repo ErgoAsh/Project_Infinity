@@ -5,9 +5,7 @@
 #include "Skill.h"
 #include "Action.h"
 #include "Animation/AnimInstance.h"
-#include "Delegate.h"
 #include "BaseCharacter.h"
-#include "ScriptDelegates.h"
 #include "ActiveSkill.generated.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
@@ -28,6 +26,7 @@ class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 	FExecuteEndEvent ExecuteEndEvent;
 
 public:
+	//TODO Make them attribute
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
 	uint8 ManaCost;
 
@@ -38,6 +37,6 @@ public:
 	virtual void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<TDelegateInstanceInterface*> GetEvents();
+	FExecuteEvent GetEvents();
 
 };

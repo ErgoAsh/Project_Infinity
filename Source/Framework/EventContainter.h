@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Object.h"
-#include "IDelegateInstance.h"
 #include "EventContainter.generated.h"
 
 /**
@@ -16,12 +15,13 @@ class UEventContainer : public UInterface {
 
 };
 
+template<class T>
 class FRAMEWORK_API IEventContainer {
 
 	GENERATED_IINTERFACE_BODY()
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Event")
-	virtual IDelegateInstance* GetEvent() = 0;
+	virtual T* GetEvent() = 0;
 	
 };

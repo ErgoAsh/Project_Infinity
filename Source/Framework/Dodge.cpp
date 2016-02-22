@@ -32,9 +32,6 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-TArray<IDelegateInstance*> UDodge::GetEvents() {
-	TArray<IDelegateInstance*> Events;
-	Events.Add(ExecuteEvent);
-	Events.Add(ExecuteEndEvent);
-	return Events;
+FExecuteEvent UDodge::GetEvent() {
+	return ExecuteEvent;
 }

@@ -26,6 +26,6 @@ public:
 	void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<IDelegateInstance*> GetEvents() override;
+	FExecuteEvent GetEvent() override;
 
 };

@@ -90,6 +90,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
 	UTexture* Icon;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
+	USphereComponent* Sphere;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Actor")
 	UStaticMeshComponent* MeshComp;
 

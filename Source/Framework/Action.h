@@ -4,23 +4,23 @@
 
 #include "Object.h"
 #include "BaseCharacter.h"
-#include "MultiEventContainer.h"
+#include "EventContainter.h"
 #include "Action.generated.h"
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
 
 /**
  * 
  */
 UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
-class UAction : public UInterface {
+class UAction : public UInterface, public IEventContainer<FExecuteEvent> {
 
 	GENERATED_UINTERFACE_BODY()
 
 };
 
-class FRAMEWORK_API IAction : public IInterface, public IMultiEventContainer {
+class FRAMEWORK_API IAction {
 
 	GENERATED_IINTERFACE_BODY()
 

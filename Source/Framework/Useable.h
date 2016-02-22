@@ -18,13 +18,6 @@ class FRAMEWORK_API AUseable : public AItem, public IEventContainer {
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	UAnimationAsset* Animation;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FUseEvent UseEvent;
-
-private:
-	UFUNCTION(BlueprintCallable, Category = "Skill")
-	void Use(ABaseCharacter* Character);
-
 public:
 	AUseable();
 
@@ -32,6 +25,8 @@ public:
 	UAnimationAsset* GetAnimation();
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<TMulticastScriptDelegate*> GetEvents() override;
+	FExecuteEvent GetEvent() override;
 
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, WithValidation, Category = "Skill")
+	void Use(ABaseCharacter* Character);
 };

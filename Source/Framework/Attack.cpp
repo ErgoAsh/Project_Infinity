@@ -3,15 +3,15 @@
 #include "Framework.h"
 #include "Attack.h"
 
-UDodge::UDodge() {
-	Animation = 
+UAttack::UAttack() {
+	//Animation = 
 }
 
-UAnimationAsset* UDodge::GetAnimation() {
+UAnimationAsset* UAttack::GetAnimation() {
 	return (UAnimationAsset*) Animation;
 }
 
-void UDodge::Execute(ABaseCharacter* Executor) {
+void UAttack::Execute(ABaseCharacter* Executor) {
 	//Add UPropertyComponent
 	UE_LOG(Debugg, Warning, TEXT("Lel"));
 	if (!Executor->GetMovementComponent()->IsFalling()) {
@@ -27,8 +27,6 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-TArray<IDelegateInstance*> UDodge::GetEvents() {
-	TArray<IDelegateInstance*> Events;
-	Events.Add(ExecuteEvent);
-	return Events;
+FExecuteEvent UAttack::GetEvent() {
+	return ExecuteEvent;
 }

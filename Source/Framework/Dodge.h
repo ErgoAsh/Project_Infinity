@@ -20,7 +20,6 @@ class FRAMEWORK_API UDodge : public UObject, public IAction {
 
 	UAnimSequence* Animation;
 	FExecuteEvent ExecuteEvent;
-	FExecuteEndEvent ExecuteEndEvent;
 
 public:
 	UDodge();
@@ -32,6 +31,6 @@ public:
 	void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	TArray<IDelegateInstance*> GetEvents() override;
+	FExecuteEvent GetEvent() override;
 
 };
