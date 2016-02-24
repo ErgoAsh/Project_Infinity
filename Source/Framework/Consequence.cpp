@@ -3,6 +3,7 @@
 #include "Framework.h"
 #include "Consequence.h"
 
-UAction::UAction(const FObjectInitializer& ObjectInitializer)
+UConsequence::UConsequence(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) {
+
 }

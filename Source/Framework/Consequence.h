@@ -8,7 +8,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExecuteConsequenceEvent);
 
 UENUM()
-enum ModifyType {
+enum EModifyType {
 	Add,
 	Remove,
 	Multiply,
@@ -17,17 +17,18 @@ enum ModifyType {
 	RemovePercentage
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FModifier {
+
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Property")
 	float AmountModified;
-	ModifyType Type;
 
-	FModifier(ModifyType Type) {
-		this->Type = Type;
-	};
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Property")
+	TEnumAsByte<EModifyType> Type;
 
-	//Should be added?
-	//virtual bool Modify() = 0;
+	FModifier() {};
 };
 
 /**
@@ -46,5 +47,5 @@ class FRAMEWORK_API IConsequence {
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool Execute();
+	virtual bool Execute() = 0;
 };

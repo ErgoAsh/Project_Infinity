@@ -4,7 +4,6 @@
 
 #include "Object.h"
 #include "Action.h"
-#include "ScriptDelegates.h"
 #include "Dodge.generated.h"
 
 
@@ -18,8 +17,11 @@ class FRAMEWORK_API UDodge : public UObject, public IAction {
 
 	GENERATED_BODY()
 
+	UPROPERTY(VisibleAnywhere, Category = "Action")
 	UAnimSequence* Animation;
-	FExecuteEvent ExecuteEvent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Action")
+	FEventContainer ExecuteEvent;
 
 public:
 	UDodge();
@@ -30,7 +32,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	void Execute(ABaseCharacter* Executor) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
-	FExecuteEvent GetEvent() override;
+	UFUNCTION(Category = "Skill")
+	FEventContainer GetEvent();
 
 };

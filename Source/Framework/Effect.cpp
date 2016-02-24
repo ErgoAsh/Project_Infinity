@@ -3,6 +3,12 @@
 #include "Framework.h"
 #include "Effect.h"
 
+UEffect::UEffect() {
 
+}
+
+bool UEffect::Execute() {
+	return true;
+}
 
 

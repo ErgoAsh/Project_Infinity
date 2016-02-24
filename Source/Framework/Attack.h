@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Action.h"
 #include "Attack.generated.h"
 
 /**
@@ -13,11 +14,14 @@ class FRAMEWORK_API UAttack : public UObject, public IAction {
 
 	GENERATED_BODY()
 	
+	UPROPERTY(VisibleAnywhere, Category = "Action")
 	UAnimSequence* Animation;
-	FExecuteEvent ExecuteEvent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Action")
+	FEventContainer ExecuteEvent;
 
 public:
-	UDodge();
+	UAttack();
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	UAnimationAsset* GetAnimation() override;
@@ -25,7 +29,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	void Execute(ABaseCharacter* Executor) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
-	FExecuteEvent GetEvent() override;
+	UFUNCTION(Category = "Skill")
+	FEventContainer GetEvent();
 
 };

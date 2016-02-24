@@ -19,13 +19,15 @@ class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintAssignable, Category = "Skill")
-	FExecuteEvent ExecuteEvent;
+	UPROPERTY(VisibleAnywhere, Category = "Skill")
+	FEventContainer ExecuteEvent;
 
 	UPROPERTY(BlueprintAssignable, Category = "Skill")
 	FExecuteEndEvent ExecuteEndEvent;
 
 public:
+	UActiveSkill();
+
 	//TODO Make them attribute
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
 	uint8 ManaCost;
@@ -36,7 +38,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	virtual void Execute(ABaseCharacter* Executor) override;
 
+	//Make it pure again
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	FExecuteEvent GetEvents();
+	virtual UAnimationAsset* GetAnimation() override;
+
+	UFUNCTION(Category = "Skill")
+	FEventContainer GetEvent() override;
 
 };

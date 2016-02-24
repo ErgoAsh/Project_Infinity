@@ -18,7 +18,7 @@ class FRAMEWORK_API UMage : public UPlayerClass {
 public:
 	UMage() : UPlayerClass() {
 		UFireBall* FireBall = NewObject<UFireBall>();
-		FireBall->ExecuteEvent.AddDynamic(this, &UMage::OnSkillExecute);
+		FireBall->GetEvent().Event.AddDynamic(this, &UMage::OnSkillExecute);
 		Skills.Add(FireBall);
 
 		bWantsBeginPlay = true;

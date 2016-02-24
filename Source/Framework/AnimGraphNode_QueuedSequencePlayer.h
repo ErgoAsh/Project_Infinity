@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "AnimGraphNode_Base.h"
 #include "AnimGraphDefinitions.h"
-#include "Kismet2/BlueprintEditorUtils.h"
+//#include "Kismet2/BlueprintEditorUtils.h"
+#include "AnimGraphNode_Base.h"
 
 //#include "Editor/AnimGraph/Classes/AnimGraphNode_Base.h"
 #include "AnimNode_QueuedSequencePlayer.h"
@@ -13,14 +13,14 @@
 UCLASS(MinimalAPI)
 class UAnimGraphNode_QueuedSequencePlayer : public UAnimGraphNode_Base
 {
-	GENERATED_UCLASS_BODY()
+	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, Category=Settings)
 	FAnimNode_QueuedSequencePlayer Node;
 
 	// UEdGraphNode interface
 	virtual FLinearColor GetNodeTitleColor() const override;
-	virtual FString GetTooltip() const override;
+	virtual FText GetTooltipText() const override;
 	virtual FText GetNodeTitle(ENodeTitleType::Type TitleType) const override;
 	// End of UEdGraphNode interface
 

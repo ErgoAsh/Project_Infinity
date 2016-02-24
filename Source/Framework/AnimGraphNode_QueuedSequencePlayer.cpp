@@ -2,21 +2,19 @@
 
 #include "Framework.h"
 #include "AnimGraphNode_QueuedSequencePlayer.h"
+#include "AnimationRuntime.h"
 
-// #include "Editor/BlueprintGraph/Classes/EdGraphSchema_K2_Actions.h"
+//#include "Editor/BlueprintGraph/Classes/EdGraphSchema_K2_Actions.h"
 //#include "Editor/GraphEditor/Public/GraphEditorActions.h"
 //#include "Editor/AnimGraph/Classes/AnimationGraphSchema.h"
+//#include "Engine/LevelScriptBlueprint.h"
+
 //#include "CompilerResultsLog.h"
 //#include "AssetRegistryModule.h"
 
 
 /////////////////////////////////////////////////////
 // UAnimGraphNode_QueuedSequencePlayer
-
-UAnimGraphNode_QueuedSequencePlayer::UAnimGraphNode_QueuedSequencePlayer(const FPostConstructInitializeProperties& PCIP)
-	: Super(PCIP)
-{
-}
 
 FLinearColor UAnimGraphNode_QueuedSequencePlayer::GetNodeTitleColor() const
 {
@@ -30,9 +28,9 @@ FLinearColor UAnimGraphNode_QueuedSequencePlayer::GetNodeTitleColor() const
 	}
 }
 
-FString UAnimGraphNode_QueuedSequencePlayer::GetTooltip() const
+FText UAnimGraphNode_QueuedSequencePlayer::GetTooltipText() const
 {
-	return TEXT("Tooltip lol");
+	return FText::FromString(TEXT("Tooltip lol"));
 }
 
 FText UAnimGraphNode_QueuedSequencePlayer::GetNodeTitle(ENodeTitleType::Type TitleType) const

@@ -15,14 +15,12 @@ class FRAMEWORK_API UVisualEffect : public UEffect {
 
 public:
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Visual")
-	FVector Location;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Visual")
 	TAssetPtr<UParticleEmitter> Particle;
 
 	UVisualEffect();
-	void BeginPlay() override;
-	void Tick() override;
+	//TODO let's try to add them without by making it Actor
+	//void BeginPlay() override;
+	//void Tick() override;
 	
 };

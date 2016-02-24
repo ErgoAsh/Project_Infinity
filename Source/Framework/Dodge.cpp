@@ -3,6 +3,7 @@
 #include "Framework.h"
 #include "Dodge.h"
 #include "Animation/AnimInstance.h"
+#include "Action.h"
 
 UDodge::UDodge() {
 	static ConstructorHelpers::FObjectFinder<UAnimSequence> Anim(TEXT(
@@ -32,6 +33,6 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-FExecuteEvent UDodge::GetEvent() {
+FEventContainer UDodge::GetEvent() {
 	return ExecuteEvent;
 }

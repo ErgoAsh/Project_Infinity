@@ -4,17 +4,30 @@
 
 #include "Object.h"
 #include "BaseCharacter.h"
-#include "EventContainter.h"
 #include "Action.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
 
+//That's what I call a fcking bad workaround
+//Epic gave me possibility to use Dynamic Delegate as a return value
+//but it doesn't work for Dynamic MULTICAST Delegate :(
+USTRUCT()
+struct FEventContainer {
+
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintAssignable, Category = "Skill")
+	FExecuteEvent Event;
+
+	FEventContainer() {}
+};
+
 /**
  * 
  */
 UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
-class UAction : public UInterface, public IEventContainer<FExecuteEvent> {
+class UAction : public UInterface {//, public IEventContainer<FExecuteEvent> {
 
 	GENERATED_UINTERFACE_BODY()
 
@@ -29,9 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	virtual UAnimationAsset* GetAnimation() = 0;
 
-	//DECLARE_EVENT_OneParam(IAction, FExecuteEvent, UAnimInstance*)
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	virtual void Execute(ABaseCharacter* Executor) = 0;
 	
-	
+	UFUNCTION(Category = "Event")
+	virtual FEventContainer GetEvent() = 0;
 };

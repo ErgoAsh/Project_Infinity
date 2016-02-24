@@ -43,11 +43,11 @@ public:
 	}
 
 	// FAnimNode_Base interface
-	GAME_API virtual void Initialize(const FAnimationInitializeContext& Context) override;
-	GAME_API virtual void CacheBones(const FAnimationCacheBonesContext & Context) override;
-	GAME_API virtual void Update(const FAnimationUpdateContext& Context) override;
-	GAME_API virtual void Evaluate(FPoseContext& Output) override;
-	// GAME_API virtual void OverrideAsset(UAnimationAsset* NewAsset) override;
-	GAME_API virtual void GatherDebugData(FNodeDebugData& DebugData) override;
+	FRAMEWORK_API virtual void Initialize(const FAnimationInitializeContext& Context) override;
+	FRAMEWORK_API virtual void CacheBones(const FAnimationCacheBonesContext & Context) override;
+	FRAMEWORK_API virtual void Update(const FAnimationUpdateContext& Context) override;
+	FRAMEWORK_API virtual void Evaluate(FPoseContext& Output) override;
+	// FRAMEWORK_API virtual void OverrideAsset(UAnimationAsset* NewAsset) override;
+	FRAMEWORK_API virtual void GatherDebugData(FNodeDebugData& DebugData) override;
 	// End of FAnimNode_Base interface
 };

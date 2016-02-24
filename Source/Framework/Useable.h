@@ -3,7 +3,8 @@
 #pragma once
 
 #include "Item.h"
-#include "Weapon.generated.h"
+#include "Effect.h"
+#include "Useable.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUseEvent, ABaseCharacter*, Character);
 
@@ -11,22 +12,23 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUseEvent, ABaseCharacter*, Characte
  * 
  */
 UCLASS()
-class FRAMEWORK_API AUseable : public AItem, public IEventContainer {
+class FRAMEWORK_API AUseable : public AItem {//, public IEventContainer<FUseEvent> {
 
 	GENERATED_BODY()
 
+	//UPROPERTY(VisibleAnywhere, Category = "Item")
+	//UAnimationAsset* Animation;
+
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	UAnimationAsset* Animation;
+	UEffect* Effect;
 
 public:
 	AUseable();
 
-	UFUNCTION(BlueprintCallable, Category = "Item")	
-	UAnimationAsset* GetAnimation();
+	//TODO refactor Item.h structure, then think about this method
+	//UFUNCTION(BlueprintCallable, Category = "Item")	
+	//UAnimationAsset* GetAnimation();
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
-	FExecuteEvent GetEvent() override;
-
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, WithValidation, Category = "Skill")
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, WithValidation, Category = "Item")
 	void Use(ABaseCharacter* Character);
 };

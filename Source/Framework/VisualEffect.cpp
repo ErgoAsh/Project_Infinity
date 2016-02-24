@@ -6,9 +6,3 @@
 UVisualEffect::UVisualEffect(){
 	//beginplay
 }
-
-void UVisualEffect::BeginPlay() {
-}
-
-void UVisualEffect::Tick() {
-}

@@ -2,6 +2,8 @@
 
 #include "Framework.h"
 #include "Attack.h"
+#include "BaseCharacter.h"
+#include "Animation/AnimInstance.h"
 
 UAttack::UAttack() {
 	//Animation = 
@@ -27,6 +29,6 @@ void UAttack::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-FExecuteEvent UAttack::GetEvent() {
+FEventContainer UAttack::GetEvent() {
 	return ExecuteEvent;
 }

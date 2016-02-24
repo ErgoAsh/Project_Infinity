@@ -90,11 +90,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
 	UTexture* Icon;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	USphereComponent* Sphere;
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Actor")
 	UStaticMeshComponent* MeshComp;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Actor")
+	UAnimationAsset* Animation;
 
 	UFUNCTION(BlueprintImplementableEvent, DisplayName = "Item: Used")
 	bool OnUse(ACharacter* character);

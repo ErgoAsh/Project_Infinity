@@ -5,6 +5,13 @@
 #include "Animation/SkeletalMeshActor.h"
 #include "Engine.h"
 
+UActiveSkill::UActiveSkill() {}
+
+UAnimationAsset* UActiveSkill::GetAnimation() {
+	unimplemented();
+	return NULL;
+}
+
 void UActiveSkill::Execute(ABaseCharacter* Executor) {
 	if (Executor) {
 		if (GetAnimation()) {
@@ -16,11 +23,11 @@ void UActiveSkill::Execute(ABaseCharacter* Executor) {
 			}
 		}
 	}
-	ExecuteEvent.Broadcast(Executor);
+	ExecuteEvent.Event.Broadcast(Executor);
 	//TODO wait for sth and broadcast ExecuteEndEvent
 }
 
-FExecuteEvent UActiveSkill::GetEvent() {
+FEventContainer UActiveSkill::GetEvent() {
 	return ExecuteEvent;
 }
 

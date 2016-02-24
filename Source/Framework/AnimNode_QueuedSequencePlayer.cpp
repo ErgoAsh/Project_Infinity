@@ -55,7 +55,8 @@ void FAnimNode_QueuedSequencePlayer::Evaluate(FPoseContext& Output)
 {
 	if ((CurrentSequence != NULL) && (Output.AnimInstance->CurrentSkeleton->IsCompatible(CurrentSequence->GetSkeleton())))
 	{
-		Output.AnimInstance->SequenceEvaluatePose(CurrentSequence, Output.Pose, FAnimExtractContext(InternalTimeAccumulator, false));
+		Output.AnimInstance->EvaluateAnimation(Output);
+		//Output.AnimInstance->SequenceEvaluatePose(CurrentSequence, Output.Pose, FAnimExtractContext(InternalTimeAccumulator, false));
 	}
 	else
 	{

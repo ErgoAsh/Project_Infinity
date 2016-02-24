@@ -10,5 +10,7 @@ public class Framework : ModuleRules
             new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RHI", "RenderCore", "ShaderCore",
                 "AnimGraph", "UnrealEd", "Kismet", "KismetWidgets", "KismetCompiler", "BlueprintGraph",
                 "GraphEditor" });
+        PrivateDependencyModuleNames.AddRange(
+            new string[] { "Json", "JsonUtilities" });
     }
 }

@@ -9,11 +9,8 @@
  * 
  */
 UCLASS()
-class FRAMEWORK_API UPassiveSkill : public USkill
-{
+class FRAMEWORK_API UPassiveSkill : public USkill {
+
 	GENERATED_BODY()
-	
-	
-	
 	
 };
