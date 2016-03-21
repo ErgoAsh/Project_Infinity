@@ -9,7 +9,7 @@ public class Framework : ModuleRules
 		PublicDependencyModuleNames.AddRange(
             new string[] { "Core", "CoreUObject", "Engine", "InputCore", "RHI", "RenderCore", "ShaderCore",
                 "AnimGraph", "UnrealEd", "Kismet", "KismetWidgets", "KismetCompiler", "BlueprintGraph",
-                "GraphEditor" });
+                "GraphEditor", "Json", "JsonUtilities" });
         PrivateDependencyModuleNames.AddRange(
             new string[] { "Json", "JsonUtilities" });
     }

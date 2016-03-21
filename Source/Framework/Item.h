@@ -6,100 +6,94 @@
 #include "Engine/DataTable.h"
 #include "Item.generated.h"
 
+
+
 UENUM(BlueprintType)
 enum class EItemType : uint8 {
-	WEAPON, //UMETA(DisplayName = "Weapon"),
-	ARMOR,  //UMETA(DisplayName = "Armor"),
-	USEABLE //UMETA(DisplayName = "Usable")
+	OTHER UMETA(DisplayName = "Other"),
+	USEABLE UMETA(DisplayName = "Usable"),
+	WEAPON UMETA(DisplayName = "Weapon"),
+	ARMOR UMETA(DisplayName = "Armor"),
+	MATERIAL UMETA(DisplayName = "Material"),
+	TOOL UMETA(DisplayName = "Tool")
 };
 
-UENUM(BlueprintType)
-enum class EItemID : uint8 {
-	BARE_HANDS, //UMETA(DisplayName = "Bare Hands"),
-	SWORD_TEST  //UMETA(DisplayName = "Test Sword")
-};
-
-USTRUCT()
-struct FItemData : public FTableRowBase {
+USTRUCT(Blueprintable) 
+struct FItemType : FTableRowBase {
 
 	GENERATED_USTRUCT_BODY()
 
-public:
-	//TODO add attributes as the last argument
-	FItemData() 
-	  : Name(FName(TEXT("BARE_HAND"))), 
-		Type(0), 
-		Description(TEXT("This land is peaceful")), 
-		CanStack(true), 
-		Damage(10) {}
+	FItemType()
+	  : Name(FName(TEXT("NULL"))),
+		Type(0),
+		Description(TEXT("DefaultItem")),
+		CanStack(false),
+		Damage(0),
+		Durability(100) {}
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	FName Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	uint8 Type;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	FString Description;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	FString Class;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	bool CanStack;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	uint8 Damage;
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	uint8 Level;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-	TAssetPtr<UTexture> Icon;
-};
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	uint8 Type;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	float Damage;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	float Durability;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	TAssetPtr<UTexture2D> Icon;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	TAssetPtr<UStaticMesh> Model;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	TAssetPtr<UAnimationAsset> Animation;
+
+}
 
 /**
  * 
  */
 UCLASS()
 class FRAMEWORK_API AItem : public AActor {
+
 	GENERATED_BODY()
-	
-public:
-	AItem() : AItem(EItemID::BARE_HANDS, EItemType::WEAPON) {};
-	AItem(EItemID ID, EItemType Type);
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
-	EItemID ItemID; //DELETE
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
-	EItemType ItemType = EItemType::WEAPON;
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	FItemType& ItemData;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	FString DisplayName;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	FString Description;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	bool bCanStack;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	bool bUse; //Move it to Usable
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	uint8 Amount = 1;
+	UStaticMeshComponent* MeshComp;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
 	USphereComponent* Sphere;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	UTexture* Icon;
+public:
+	AItem() : AItem(FItemType()) {};
+	AItem(FItemType& ItemData);
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Actor")
-	UStaticMeshComponent* MeshComp;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
+	EItemType Type;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Actor")
-	UAnimationAsset* Animation;
-
-	UFUNCTION(BlueprintImplementableEvent, DisplayName = "Item: Used")
-	bool OnUse(ACharacter* character);
-
-	UFUNCTION(BlueprintImplementableEvent, DisplayName = "Item: Dropped")
-	bool OnDrop(ACharacter* character);
+	UPROPERTY(BlueprintCallable, Category = "Item")
+	FItemType& GetItemData() { return ItemData; };
 
 };

@@ -9,8 +9,13 @@ class AFrameworkGameMode : public AGameMode {
 
 	GENERATED_BODY()
 
+	UPROPERTY(VisibleAnywhere, Category = "Game")
+	UDataTable* ItemData;
+
 public:
 	AFrameworkGameMode();
+
+	void PostLogin(APlayerController* NewPlayer) override;
 
 	//bool SavePlayer(ABaseCharacter* Player);
 	//UBaseCharacter LoadPlayer()

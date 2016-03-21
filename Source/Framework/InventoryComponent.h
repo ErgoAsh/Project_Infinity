@@ -6,20 +6,69 @@
 #include "Item.h"
 #include "InventoryComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EInventoryContainerSlot : uint8 {
+	LEFT_HAND UMETA(DisplayName = "Left Hand"),
+	RIGHT_HAND UMETA(DisplayName = "Right Hand"),
+	HELMET UMETA(DisplayName = "Helmet"),
+	CHESTPLATE UMETA(DisplayName = "Chestplate"),
+	LEGGINGS UMETA(DisplayName = "Leggings"),
+	BOOTS UMETA(DisplayName = "Boots")
+};
+
+USTRUCT()
+struct FInventoryContainer {
+
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	AWeapon* LeftHand;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	AWeapon* RightHand;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	AItem* Helmet;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	AItem* Chestplate;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	AItem* Leggings;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	AItem* Boots;
+
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FRAMEWORK_API UInventoryComponent : public UActorComponent {
 
 	GENERATED_BODY()
 
-public:	
-	UInventoryComponent();
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	TArray<AItem*> InventoryArray;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Inventory")
-	TArray<AItem*> ItemsInRange;
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
+	FInventoryContainer& Container;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Inventory")
 	bool bHasItemsInRange;
+
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
+	AWeapon* LeftHandItem;
+
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
+	AWeapon* RightHandItem;
+
+	//TODO delete it when the Inventory UI will be done
+	UStaticMesh* StaticMeshLel;
+
+public:	
+	UInventoryComponent() : UInventoryComponent(FInventoryContainer()) {};
+	UInventoryComponent(FInventoryContainer Load);
+
+	virtual void OnRegister() override;
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
 	void InitializeCollision(UShapeComponent* Shape);
@@ -33,11 +82,29 @@ public:
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
 	void OnComponentEndOverlap(class AActor * OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
-	UFUNCTION(BlueprintImplementableEvent, DisplayName = "Pick up Item", Category = "Inventory")
-	void PickUp(AItem* Item);
+	//////////////////////////////////////////////////////////////////////////
+	// Equipment
 
-	//UFUNCTION(BlueprintCallable, WithValidation, Server, Reliable, Category = "Inventory")
-	//virtual void Drop(AItem* Item);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	AItem* Get(EInventoryContainerSlot ItemSlot);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool IsSet(AItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool Set(EInventoryContainerSlot ItemSlot, AItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool Remove(EInventoryContainerSlot ItemSlot);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool TryRemove(AItem* Item);
+
+	//////////////////////////////////////////////////////////////////////////
+	// Inventory
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void Drop(AItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void Clear();
@@ -48,19 +115,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool HasItem(AItem* Item);
 
-	AItem* GetItem(uint8 Index);
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	AItem* GetItemByIndex(uint8 Index);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	AItem* GetItem(EItemID ItemID);
+	AItem* GetItemByID(uint8 ItemID);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	TArray<AItem*> GetItemsByType(EItemType ItemType);
-
-protected:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
-	TArray<AItem*> InventoryArray;
-
-private:
-	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
-	void ConfirmPickUp();
 };

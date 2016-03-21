@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{A7D4BA07-46D0-429E-F063-639571FFF436}",
+	"EngineAssociation": "4.10",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -17,6 +17,12 @@
 				"RenderCore",
 				"ShaderCore"
 			]
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "VaRestPlugin",
+			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [
