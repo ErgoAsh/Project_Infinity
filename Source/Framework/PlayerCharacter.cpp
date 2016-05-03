@@ -35,9 +35,8 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 	check(InputComponent);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	InputComponent->BindAction("AttackRight", IE_Pressed, this, &ABaseCharacter::Attack);
-	InputComponent->BindAction("AttackRight", IE_Released, this, &ABaseCharacter::AttackStop);
-	InventoryComponent->InitializeInput(InputComponent);
+	//InputComponent->BindAction("AttackRight", IE_Pressed, this, &ABaseCharacter::Attack);
+	//InputComponent->BindAction("AttackRight", IE_Released, this, &ABaseCharacter::AttackStop);
 
 	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);

@@ -6,8 +6,8 @@
 #include "BaseCharacter.h"
 #include "Action.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnExecuteEvent, ABaseCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnExecuteEndEvent, ABaseCharacter*, Character);
 
 //That's what I call a fcking bad workaround
 //Epic gave me possibility to use Dynamic Delegate as a return value
@@ -18,7 +18,7 @@ struct FEventContainer {
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(BlueprintAssignable, Category = "Skill")
-	FExecuteEvent Event;
+	FOnExecuteEvent Event;
 
 	FEventContainer() {}
 };
@@ -46,5 +46,5 @@ public:
 	virtual void Execute(ABaseCharacter* Executor) = 0;
 	
 	UFUNCTION(Category = "Event")
-	virtual FEventContainer GetEvent() = 0;
+	virtual FEventContainer& GetEvent() = 0;
 };

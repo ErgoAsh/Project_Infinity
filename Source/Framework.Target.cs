@@ -21,7 +21,8 @@ public class FrameworkTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.Add("Framework");
-	}
+        OutExtraModuleNames.Add("VaRestPlugin");
+    }
 
     public override void SetupGlobalEnvironment(
         TargetInfo Target,

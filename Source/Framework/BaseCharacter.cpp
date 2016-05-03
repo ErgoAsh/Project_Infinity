@@ -3,22 +3,23 @@
 #include "Framework.h"
 #include "BaseCharacter.h"
 #include "Engine.h"
-#include "EquipmentComponent.h"
 #include "PlayerClass.h"
 #include "Mage.h"
 #include "Dodge.h"
+#include "Attack.h"
 
 //////////////////////////////////////////////////////////////////////////
 // FActionList
 
 FActionList::FActionList() {
 	Dodge = NewObject<UDodge>();
+	Attack = NewObject<UAttack>();
 }
 
 //////////////////////////////////////////////////////////////////////////
 // AFrameworkCharacter
 
-ABaseCharacter::ABaseCharacter() {
+ABaseCharacter::ABaseCharacter() : Action(FActionList()) {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
 
@@ -50,18 +51,10 @@ ABaseCharacter::ABaseCharacter() {
 	InventoryComponent->InitializeCollision(GetCapsuleComponent());
 	InventoryComponent->bAutoActivate = true;
 
-	// Load a player item container
-	ItemEquipment = CreateDefaultSubobject<UEquipmentComponent>(TEXT("ItemContainer"));
-	AddComponent(FName("ItemContainer"), false, FTransform(), ItemEquipment);
-	ItemEquipment->bAutoActivate = true;
-
-	//TODO load
-	Health = 100;
-	Action = FActionList();
-}
-
-USkill* ABaseCharacter::GetFireSkill() {
-	return PlayerClass->GetSkill(FName(TEXT("FireBall")));
+	Health = NewObject<UFrameworkAttribute>();
+	Health->SetName()
+	Mana = NewObject<UFrameworkAttribute>();
+	Stamina = NewObject<UFrameworkAttribute>();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -72,41 +65,18 @@ void ABaseCharacter::BeginPlay() {
 }
 
 void ABaseCharacter::Tick(float DeltaSeconds) {
-	//if (GetArmoryComponent()->Get(EInventoryContainerSlot::RIGHT_HAND)) {
-	//	DrawDebugSphere(
-	//		GetWorld(),
-	//		GetArmoryComponent()->Get(EInventoryContainerSlot::RIGHT_HAND)->GetActorLocation(),
-	//		30,
-	//		32,
-	//		FColor(255, 255, 0)
-	//	);
-	//}
-	//if (GetArmoryComponent()->Get(EInventoryContainerSlot::LEFT_HAND)) {
-	//	DrawDebugSphere(
-	//		GetWorld(),
-	//		GetArmoryComponent()->Get(EInventoryContainerSlot::LEFT_HAND)->GetActorLocation(),
-	//		30,
-	//		32,
-	//		FColor(255, 0, 0)
-	//	);
-	//}
 }
 
-void ABaseCharacter::TakeDamage(AActor* DamageCauser, FHitResult Hit) {
-	//Weapon.getDamage()
-	//TODO add possibility to damage it using also skills and environment
-	Health -= 10;
+float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) {
+	//TODO add possibility to add/remove more damages using skills and environment
+
+	GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, TEXT("TakeDamage"));
 	if (Health <= 0) {
 		Destroy();
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, TEXT("TakeDamage"));
 }
 
-//Redone those two!
-void ABaseCharacter::Attack() {
-	bIsAttackingRight = true;
-}
-
-void ABaseCharacter::AttackStop() {
-	bIsAttackingRight = false;
+float ABaseCharacter::InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent, AController* EventInstigator, AActor* DamageCauser) {
+	Health -= Damage;
+	return Health;
 }

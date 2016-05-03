@@ -9,9 +9,6 @@ class AFrameworkGameMode : public AGameMode {
 
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, Category = "Game")
-	UDataTable* ItemData;
-
 public:
 	AFrameworkGameMode();
 

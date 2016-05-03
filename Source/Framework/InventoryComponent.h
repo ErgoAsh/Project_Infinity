@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/SceneComponent.h"
+#include "Weapon.h"
 #include "Item.h"
 #include "InventoryComponent.generated.h"
 
@@ -13,11 +14,12 @@ enum class EInventoryContainerSlot : uint8 {
 	HELMET UMETA(DisplayName = "Helmet"),
 	CHESTPLATE UMETA(DisplayName = "Chestplate"),
 	LEGGINGS UMETA(DisplayName = "Leggings"),
-	BOOTS UMETA(DisplayName = "Boots")
+	BOOTS UMETA(DisplayName = "Boots"),
+	NONE
 };
 
 USTRUCT()
-struct FInventoryContainer {
+struct FEquipment {
 
 	GENERATED_USTRUCT_BODY()
 
@@ -46,14 +48,17 @@ class FRAMEWORK_API UInventoryComponent : public UActorComponent {
 
 	GENERATED_BODY()
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Inventory")
+	UPROPERTY(EditAnywhere, Category = "Inventory")
 	TArray<AItem*> InventoryArray;
 
-	UPROPERTY(VisibleAnywhere, Category = "Inventory")
-	FInventoryContainer& Container;
+	UPROPERTY(EditAnywhere, Category = "Inventory")
+	TArray<AItem*> ItemsInRange;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Inventory")
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	bool bHasItemsInRange;
+
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
+	FEquipment Equipment;
 
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	AWeapon* LeftHandItem;
@@ -65,8 +70,8 @@ class FRAMEWORK_API UInventoryComponent : public UActorComponent {
 	UStaticMesh* StaticMeshLel;
 
 public:	
-	UInventoryComponent() : UInventoryComponent(FInventoryContainer()) {};
-	UInventoryComponent(FInventoryContainer Load);
+	UInventoryComponent() : UInventoryComponent(FEquipment()) {};
+	UInventoryComponent(FEquipment Load);
 
 	virtual void OnRegister() override;
 
@@ -74,7 +79,7 @@ public:
 	void InitializeCollision(UShapeComponent* Shape);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
-	void InitializeInput(UInputComponent* Input);
+	void InitializeInput(UInputComponent* Shape);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
 	void OnComponentOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
@@ -89,16 +94,10 @@ public:
 	AItem* Get(EInventoryContainerSlot ItemSlot);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool IsSet(AItem* Item);
-
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool Set(EInventoryContainerSlot ItemSlot, AItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool Remove(EInventoryContainerSlot ItemSlot);
-
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool TryRemove(AItem* Item);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Inventory
@@ -107,7 +106,7 @@ public:
 	void Drop(AItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void Clear();
+	void PickUp();
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void AddItem(AItem* Item);
@@ -116,11 +115,18 @@ public:
 	bool HasItem(AItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	AItem* GetItemByIndex(uint8 Index);
-
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	AItem* GetItemByID(uint8 ItemID);
+	TArray<AItem*> GetItemsByID(uint8 ItemID);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	TArray<AItem*> GetItemsByType(EItemType ItemType);
+
+private:
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	AItem* GetItem(uint8 Index);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool Delete(AItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void Clear();
 };

@@ -2,22 +2,45 @@
 
 #include "Framework.h"
 #include "Engine.h"
+#include "BaseCharacter.h"
 #include "InventoryComponent.h"
 
+UInventoryComponent::UInventoryComponent(FEquipment Load) : Equipment(Load) {
 
-// Sets default values for this component's properties
-UInventoryComponent::UInventoryComponent() {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	bWantsBeginPlay = true;
 	PrimaryComponentTick.bCanEverTick = true;
 
 	Clear();
 }
 
-void UEquipmentComponent::OnRegister() {
-	Super::OnRegister();
+void UInventoryComponent::PickUp() {
+	for (int32 i = 0; i < ItemsInRange.Num(); i++) {
+		if (!ItemsInRange[i]) continue;
+		if (!ItemsInRange[i]->IsValidLowLevel()) continue;
 
+		AddItem(ItemsInRange[i]);
+		ItemsInRange[i]->MeshComp->DestroyComponent();
+	}
+}
+
+void UInventoryComponent::Drop(AItem* Item) {
+	Delete(Item);
+
+	UStaticMeshComponent* Comp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
+	Item->MeshComp = Comp;
+	Comp->SetOnlyOwnerSee(false);
+	Comp->bCastDynamicShadow = true;
+	Comp->CastShadow = true;
+	Comp->AttachTo(Item->GetRootComponent());
+	Comp->StaticMesh = Item->GetItemData().Model.Get();
+
+	FVector Loc = GetOwner()->GetActorLocation();
+	Loc.Z -= GetOwner()->GetSimpleCollisionHalfHeight();
+	Item->GetRootComponent()->SetWorldLocation(Loc);
+}
+
+void UInventoryComponent::OnRegister() {
+	Super::OnRegister();
 
 	ABaseCharacter* Char = Cast<ABaseCharacter>(GetOwner());
 	if (Char) {
@@ -29,7 +52,7 @@ void UEquipmentComponent::OnRegister() {
 			RightHandItem->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketR"),
 				EAttachLocation::SnapToTargetIncludingScale, true);
 		}
-		Container.RightHand = RightHandItem;
+		Equipment.RightHand = RightHandItem;
 		RightHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
 		//RightHandItem->MeshComp->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
 
@@ -41,32 +64,32 @@ void UEquipmentComponent::OnRegister() {
 			LeftHandItem->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketL"),
 				EAttachLocation::SnapToTargetIncludingScale, true);
 		}
-		Container.LeftHand = LeftHandItem;
+		Equipment.LeftHand = LeftHandItem;
 		LeftHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
 		//LeftHandItem->MeshComp->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
 	}
 }
 
-AItem* UEquipmentComponent::Get(EInventoryContainerSlot ItemSlot) {
+AItem* UInventoryComponent::Get(EInventoryContainerSlot ItemSlot) {
 	switch (ItemSlot) {
 	case EInventoryContainerSlot::LEFT_HAND:
-		return Container.LeftHand;
+		return Equipment.LeftHand;
 	case EInventoryContainerSlot::RIGHT_HAND:
-		return Container.RightHand;
+		return Equipment.RightHand;
 	case EInventoryContainerSlot::HELMET:
-		return Container.Helmet;
+		return Equipment.Helmet;
 	case EInventoryContainerSlot::CHESTPLATE:
-		return Container.Chestplate;
+		return Equipment.Chestplate;
 	case EInventoryContainerSlot::LEGGINGS:
-		return Container.Leggings;
+		return Equipment.Leggings;
 	case EInventoryContainerSlot::BOOTS:
-		return Container.Boots;
+		return Equipment.Boots;
 	default:
 		return nullptr;
 	}
 }
 
-bool UEquipmentComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
+bool UInventoryComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 	if (!Item) {
 		return false;
 	}
@@ -74,34 +97,42 @@ bool UEquipmentComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 	if (Char) {
 		UInventoryComponent* Inventory = Char->GetInventoryComponent();
 		if (Inventory && (Inventory->HasItem(Item) || (Item == LeftHandItem || Item == RightHandItem))) {
-			//If can use
+			AWeapon* Weapon;
 			switch (ItemSlot) {
 			case EInventoryContainerSlot::RIGHT_HAND:
-				Container.RightHand = Item;
-				Item->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketR"),
-					EAttachLocation::SnapToTargetIncludingScale, true);
-				return true;
+				Weapon = Cast<AWeapon>(Item);
+				if (Weapon) {
+					Equipment.RightHand = Weapon;
+					Item->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketR"),
+						EAttachLocation::SnapToTargetIncludingScale, true);
+					return true;
+				}
+				return false;
 
 			case EInventoryContainerSlot::LEFT_HAND:
-				Container.LeftHand = Item;
-				Item->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketL"),
-					EAttachLocation::SnapToTargetIncludingScale, true);
+				Weapon = Cast<AWeapon>(Item);
+				if (Weapon) {
+					Equipment.LeftHand = Weapon;
+					Item->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketL"),
+						EAttachLocation::SnapToTargetIncludingScale, true);
+					return false;
+				}
 				return true;
 
 			case EInventoryContainerSlot::HELMET:
-				Container.Helmet = Item;
+				Equipment.Helmet = Item;
 				return true;
 
 			case EInventoryContainerSlot::CHESTPLATE:
-				Container.Chestplate = Item;
+				Equipment.Chestplate = Item;
 				return true;
 
 			case EInventoryContainerSlot::LEGGINGS:
-				Container.Leggings = Item;
+				Equipment.Leggings = Item;
 				return true;
 
 			case EInventoryContainerSlot::BOOTS:
-				Container.Boots = Item;
+				Equipment.Boots = Item;
 				return true;
 			default: break;
 			}
@@ -110,36 +141,36 @@ bool UEquipmentComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 	return false;
 }
 
-bool UEquipmentComponent::Remove(EInventoryContainerSlot ItemSlot) {
+bool UInventoryComponent::Remove(EInventoryContainerSlot ItemSlot) {
 	switch (ItemSlot) {
 	case EInventoryContainerSlot::LEFT_HAND:
-		if (Container.LeftHand) {
-			Container.LeftHand = LeftHandItem;
+		if (Equipment.LeftHand) {
+			Equipment.LeftHand = LeftHandItem;
 			return true;
 		} break;
 	case EInventoryContainerSlot::RIGHT_HAND:
-		if (Container.RightHand) {
-			Container.RightHand = RightHandItem;
+		if (Equipment.RightHand) {
+			Equipment.RightHand = RightHandItem;
 			return true;
 		} break;
 	case EInventoryContainerSlot::HELMET:
-		if (Container.Helmet) {
-			Container.Helmet = nullptr;
+		if (Equipment.Helmet) {
+			Equipment.Helmet = NULL;
 			return true;
 		} break;
 	case EInventoryContainerSlot::CHESTPLATE:
-		if (Container.Chestplate) {
-			Container.Chestplate = nullptr;
+		if (Equipment.Chestplate) {
+			Equipment.Chestplate = NULL;
 			return true;
 		} break;
 	case EInventoryContainerSlot::LEGGINGS:
-		if (Container.Leggings) {
-			Container.Leggings = nullptr;
+		if (Equipment.Leggings) {
+			Equipment.Leggings = NULL;
 			return true;
 		} break;
 	case EInventoryContainerSlot::BOOTS:
-		if (Container.Boots) {
-			Container.Boots = nullptr;
+		if (Equipment.Boots) {
+			Equipment.Boots = NULL;
 			return true;
 		} break;
 	default:
@@ -148,14 +179,14 @@ bool UEquipmentComponent::Remove(EInventoryContainerSlot ItemSlot) {
 	return false;
 }
 
-bool UEquipmentComponent::TryRemove(AItem* Item) {
-	if (Item == Container.LeftHand) { return Remove(EInventoryContainerSlot::LEFT_HAND); }
-	if (Item == Container.RightHand) { return Remove(EInventoryContainerSlot::RIGHT_HAND); }
-	if (Item == Container.Helmet) { return Remove(EInventoryContainerSlot::HELMET); }
-	if (Item == Container.Chestplate) { return Remove(EInventoryContainerSlot::CHESTPLATE); }
-	if (Item == Container.Leggings) { return Remove(EInventoryContainerSlot::LEGGINGS); }
-	if (Item == Container.Boots) { return Remove(EInventoryContainerSlot::BOOTS); }
-
+bool UInventoryComponent::Delete(AItem* Item) {
+	if (Item == Equipment.LeftHand) { return Remove(EInventoryContainerSlot::LEFT_HAND); }
+	if (Item == Equipment.RightHand) { return Remove(EInventoryContainerSlot::RIGHT_HAND); }
+	if (Item == Equipment.Helmet) { return Remove(EInventoryContainerSlot::HELMET); }
+	if (Item == Equipment.Chestplate) { return Remove(EInventoryContainerSlot::CHESTPLATE); }
+	if (Item == Equipment.Leggings) { return Remove(EInventoryContainerSlot::LEGGINGS); }
+	if (Item == Equipment.Boots) { return Remove(EInventoryContainerSlot::BOOTS); }
+	InventoryArray.Remove(Item);
 	return false;
 }
 
@@ -169,13 +200,18 @@ TArray<AItem*> UInventoryComponent::GetItemsByType(EItemType ItemType) {
 	return TArray<AItem*>();
 }
 
-AItem* UInventoryComponent::GetItem(EItemID ItemID) {
+TArray<AItem*> UInventoryComponent::GetItemsByID(uint8 ID) {
+	TArray<AItem*> Items;
 	for (int i = 0; i < InventoryArray.Num(); i++) {
-		if (InventoryArray[i]->ItemID == ItemID) {
-			return InventoryArray[i];
+		if (InventoryArray[i]->GetItemData().ID == ID) {
+			Items.Add(InventoryArray[i]);
 		}
 	}
-	return nullptr;
+	return Items;
+}
+
+AItem* UInventoryComponent::GetItem(uint8 Index) {
+	return InventoryArray[Index];
 }
 
 void UInventoryComponent::Clear() {
@@ -184,10 +220,6 @@ void UInventoryComponent::Clear() {
 		InventoryArray.Remove(Item);
 	}
 	InventoryArray.Empty();
-}
-
-AItem* UInventoryComponent::GetItem(uint8 Index) {
-	return InventoryArray[Index];
 }
 
 void UInventoryComponent::AddItem(AItem* Item) {
@@ -205,7 +237,7 @@ void UInventoryComponent::InitializeCollision(UShapeComponent* Shape) {
 }
 
 void UInventoryComponent::InitializeInput(UInputComponent* Input) {
-	Input->BindAction("PickUp", IE_Pressed, this, &UInventoryComponent::ConfirmPickUp);
+	Input->BindAction("PickUp", IE_Pressed, this, &UInventoryComponent::PickUp);
 }
 
 void UInventoryComponent::OnComponentOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp,
@@ -213,7 +245,7 @@ void UInventoryComponent::OnComponentOverlap(class AActor* OtherActor, class UPr
 	if (OtherComp->GetCollisionProfileName().Compare(FName(TEXT("ItemPickUp"))), ESearchCase::IgnoreCase) {
 		AItem* VisualItem = Cast<AItem>(OtherActor);
 		if (VisualItem) {
-			if (!(VisualItem->GetOwner() == GetOwner())) {
+			if (!(VisualItem->GetOwner() == GetOwner()) && VisualItem->bPickAble) {
 				ItemsInRange.Add(VisualItem);
 				bHasItemsInRange = true;
 			}
@@ -231,27 +263,3 @@ void UInventoryComponent::OnComponentEndOverlap(class AActor * OtherActor,
 		}
 	}
 }
-
-void UInventoryComponent::ConfirmPickUp() {
-	for (int32 i = 0; i < ItemsInRange.Num(); i++) {
-		if (!ItemsInRange[i]) continue;
-		if (!ItemsInRange[i]->IsValidLowLevel()) continue;
-
-		if (ItemsInRange[i]->Sphere->GetScaledSphereRadius() < GetOwner()->GetDistanceTo(ItemsInRange[i])) {
-			AddItem(ItemsInRange[i]);
-			ItemsInRange[i]->MeshComp->DestroyComponent();
-
-			ACharacter* Character = Cast<ACharacter>(this->GetOwner());
-			if (Character) {
-				if (ItemsInRange[i].ItemType = EItemType::USEABLE) {
-					ItemsInRange[i]->OnUse(Character);
-				}
-			}
-		}
-	}
-}
-
-//bool UInventoryComponent::PickUp_Validate(AItem* Item) {
-//	//If inventory/slot is not full
-//	return true;
-//}

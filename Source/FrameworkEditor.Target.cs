@@ -21,5 +21,6 @@ public class FrameworkEditorTarget : TargetRules
 		)
 	{
 		OutExtraModuleNames.Add("Framework");
-	}
+        //OutExtraModuleNames.Add("VaRestPlugin");
+    }
 }

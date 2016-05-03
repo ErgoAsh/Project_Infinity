@@ -21,6 +21,7 @@ public class FrameworkServerTarget : TargetRules
     {
         base.SetupBinaries(Target, ref OutBuildBinaryConfigurations, ref OutExtraModuleNames);
         OutExtraModuleNames.Add("Framework");
+        //OutExtraModuleNames.Add("VaRestPlugin");
     }
  
     public override bool GetSupportedPlatforms(ref List<UnrealTargetPlatform> OutPlatforms)

@@ -2,14 +2,15 @@
 #pragma once
 #include "GameFramework/Character.h"
 #include "InventoryComponent.h"
-#include "EquipmentComponent.h"
-#include "Damageable.h"
+#include "Loadable.h"
 #include "ScriptInterface.h"
+#include "FrameworkAttribute.h"
 #include "BaseCharacter.generated.h"
 
 class UPlayerClass;
 class IAction;
 class UDodge;
+class UAttack;
 
 USTRUCT()
 struct FActionList {
@@ -21,70 +22,51 @@ struct FActionList {
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
 	UDodge* Dodge;
-	//InteractWithObj
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
+	UAttack* Attack;
 	//InteractWithNPC
 	//PickUpItem
-
-	//HandLeft
-	//HandLeftSpecial
-	//HandRight
-	//HandRightSpecial
 
 	FActionList();
 };
 
 UCLASS(config=Game)
-class ABaseCharacter : public ACharacter, public IDamageable {
+class ABaseCharacter : public ACharacter {
 
 	GENERATED_BODY()
-	
-protected:
+
 	/** Inventory */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Properties, meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* InventoryComponent;
 
-	/** Player class */
+	/** Class */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Properties, meta = (AllowPrivateAccess = "true"))
 	class UPlayerClass* PlayerClass;
 
-	/** Player armory */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Properties, meta = (AllowPrivateAccess = "true"))
-	class UEquipmentComponent* ItemEquipment;
-
 public:
 	ABaseCharacter();
-
-	UFUNCTION(BlueprintCallable, Category = "Skill")
-	USkill* GetFireSkill();
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack)
-	bool bIsAttackingLeft;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Attack)
-	bool bIsAttackingRight;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
 	bool bIsDead;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	uint8 Health;
+	UFrameworkAttribute* Health;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	uint8 Mana;
+	UFrameworkAttribute* Mana;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	uint8 Stamina;
+	UFrameworkAttribute* Stamina;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	FActionList Action;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BB")
+	FActionList& Action;
 
 	UFUNCTION(Category = "Damage")
-	void TakeDamage(AActor* DamageCauser, FHitResult Hit) override;
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	//TODO GetInventoryPlacement(?), GetCurrentWeapon(), GetWeaponAttackAnimation();
-	//TODO AttackLeft, AttackRight
-	void Attack();
-	void AttackStop();
+	UFUNCTION(Category = "Damage")
+	float InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
@@ -93,9 +75,7 @@ protected:
 public:
 	/** Returns UInventoryComponent subobject **/
 	FORCEINLINE class UInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
-	/** Returns PlayerClass subobject **/
+	/** Returns UPlayerClass subobject **/
 	FORCEINLINE class UPlayerClass* GetPlayerClass() const { return PlayerClass; }
-	/** Returns ArmoryComponent subobject **/
-	FORCEINLINE class UEquipmentComponent* GetEquipmentComponent() const { return ItemEquipment; }
 };
 

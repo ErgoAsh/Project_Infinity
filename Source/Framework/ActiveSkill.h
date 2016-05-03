@@ -23,7 +23,7 @@ class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 	FEventContainer ExecuteEvent;
 
 	UPROPERTY(BlueprintAssignable, Category = "Skill")
-	FExecuteEndEvent ExecuteEndEvent;
+	FOnExecuteEndEvent ExecuteEndEvent;
 
 public:
 	UActiveSkill();
@@ -43,6 +43,6 @@ public:
 	virtual UAnimationAsset* GetAnimation() override;
 
 	UFUNCTION(Category = "Skill")
-	FEventContainer GetEvent() override;
+	FEventContainer& GetEvent() override;
 
 };

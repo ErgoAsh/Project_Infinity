@@ -19,7 +19,7 @@ enum class EItemType : uint8 {
 };
 
 USTRUCT(Blueprintable) 
-struct FItemType : FTableRowBase {
+struct FItemType : public FTableRowBase {
 
 	GENERATED_USTRUCT_BODY()
 
@@ -29,7 +29,22 @@ struct FItemType : FTableRowBase {
 		Description(TEXT("DefaultItem")),
 		CanStack(false),
 		Damage(0),
-		Durability(100) {}
+		Durability(100) {};
+
+	EItemType GetType() {
+		switch (Type) {
+		case 0: return EItemType::OTHER;
+		case 1: return EItemType::USEABLE;
+		case 2: return EItemType::WEAPON;
+		case 3: return EItemType::ARMOR;
+		case 4: return EItemType::MATERIAL;
+		case 5: return EItemType::TOOL;
+		default: return EItemType::OTHER;
+		}
+	}
+
+	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	uint8 ID;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	FName Name;
@@ -50,7 +65,7 @@ struct FItemType : FTableRowBase {
 	uint8 Level;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	uint8 Type;
+	uint8 ItemType;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	float Damage;
@@ -67,7 +82,7 @@ struct FItemType : FTableRowBase {
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	TAssetPtr<UAnimationAsset> Animation;
 
-}
+};
 
 /**
  * 
@@ -78,22 +93,25 @@ class FRAMEWORK_API AItem : public AActor {
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemType& ItemData;
+	FItemType ItemData;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
-	UStaticMeshComponent* MeshComp;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
+	UPROPERTY(VisibleAnywhere, Category = "Item")
 	USphereComponent* Sphere;
 
 public:
 	AItem() : AItem(FItemType()) {};
-	AItem(FItemType& ItemData);
+	AItem(FItemType Data);
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
-	EItemType Type;
+	UStaticMeshComponent* MeshComp;
 
-	UPROPERTY(BlueprintCallable, Category = "Item")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
+	EItemType ItemType;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
+	bool bPickAble = true;
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
 	FItemType& GetItemData() { return ItemData; };
 
 };

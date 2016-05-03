@@ -33,6 +33,6 @@ public:
 	void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(Category = "Skill")
-	FEventContainer GetEvent();
+	FEventContainer& GetEvent();
 
 };

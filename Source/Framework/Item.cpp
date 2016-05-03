@@ -3,16 +3,15 @@
 #include "Framework.h"
 #include "Item.h"
 
-AItem::AItem(FItemType& ItemData) {
-	this->ItemData = ItemData;
-	switch (ItemData.Type) {
-	case 0:  Type = EItemType::OTHER; break;
-	case 1:  Type = EItemType::USEABLE; break;
-	case 2:	 Type = EItemType::WEAPON; break;
-	case 3:  Type = EItemType::ARMOR; break;
-	case 4:	 Type = EItemType::MATERIAL; break;
-	case 5:	 Type = EItemType::TOOL; break;
-	default: Type = EItemType::OTHER; break;
+AItem::AItem(FItemType Data) : ItemData(Data) {
+	switch (Data.Type) {
+	case 0:  ItemType = EItemType::OTHER; break;
+	case 1:  ItemType = EItemType::USEABLE; break;
+	case 2:	 ItemType = EItemType::WEAPON; break;
+	case 3:  ItemType = EItemType::ARMOR; break;
+	case 4:	 ItemType = EItemType::MATERIAL; break;
+	case 5:	 ItemType = EItemType::TOOL; break;
+	default: ItemType = EItemType::OTHER; break;
 	}
 	
 	// Set this actor to be able to be picked up by actors with InventoryComponent
@@ -26,4 +25,5 @@ AItem::AItem(FItemType& ItemData) {
 	MeshComp->bCastDynamicShadow = true;
 	MeshComp->CastShadow = true;
 	MeshComp->AttachTo(RootComponent);
+	MeshComp->StaticMesh = ItemData.Model.Get();
 }

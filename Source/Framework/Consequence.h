@@ -27,6 +27,10 @@ struct FModifier {
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Property")
 	TEnumAsByte<EModifyType> Type;
+	
+	FORCEINLINE bool operator==(const FModifier& Other) {
+		return (AmountModified == Other.AmountModified && Type == Other.Type);
+	}
 
 	FModifier() {};
 };

@@ -33,6 +33,6 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-FEventContainer UDodge::GetEvent() {
+FEventContainer& UDodge::GetEvent() {
 	return ExecuteEvent;
 }

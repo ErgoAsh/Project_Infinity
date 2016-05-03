@@ -6,14 +6,10 @@
 
 AFrameworkGameMode::AFrameworkGameMode() {
 	DefaultPawnClass = APlayerCharacter::StaticClass();
-
-	static ConstructorHelpers::FObjectFinder<UDataTable>
-		DataTable(TEXT("DataTable'/Game/ThirdPerson/ItemTable.ItemTable'"));
-	ItemData = DataTable.Object;
 }
 
 void AFrameworkGameMode::PostLogin(APlayerController* NewPlayer) {
-
+	//UVaRestRequestJSON::ConstructRequestExt();
 }
 
 //bool AFrameworkGameMode::SavePlayer(ABaseCharacter* Player) {

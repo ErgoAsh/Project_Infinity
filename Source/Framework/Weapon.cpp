@@ -5,6 +5,7 @@
 #include "BaseCharacter.h"
 #include "Item.h"
 #include "PhysicsEngine/DestructibleActor.h"
+#include "Attack.h"
 #include "Engine.h"
 
 AWeapon::AWeapon() {
@@ -19,7 +20,7 @@ void AWeapon::TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFun
 	if (bUseDefaultTraceMethod) {
 		ABaseCharacter* Char = Cast<ABaseCharacter>(GetOwner());
 		if (Char) {
-			if (Char->bIsAttackingLeft || Char->bIsAttackingRight) {
+			if (Char->Action.Attack->bAttackLeft || Char->Action.Attack->bAttackRight) {
 				FVector Start = MeshComp->GetSocketLocation(FName(TEXT("TraceStart")));
 				FVector End = MeshComp->GetSocketLocation(FName(TEXT("TraceEnd")));
 				FHitResult Result = Trace(Start, End);
@@ -34,11 +35,12 @@ void AWeapon::TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFun
 							ApplyDamage(100, Result.ImpactPoint, (Start - End) * -1, 2500);
 					}
 				}
-				IDamageable* Damageable = Cast<IDamageable>(Result.GetActor());
-				if (Damageable) {
-					GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, TEXT("Test"));
-					Damageable->TakeDamage(GetOwner(), Result);
-				}
+				//IDamageable* Damageable = Cast<IDamageable>(Result.GetActor());
+				//if (Damageable) {
+				//	GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, TEXT("Test"));
+				//	Char->TakeDamage(Damage, FDamageEvent(), 
+				//		GetPlayerControllerFromNetId(GetOwner()->GetWorld(), ), this);
+				//}
 			}
 		}
 	}

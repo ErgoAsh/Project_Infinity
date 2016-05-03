@@ -29,6 +29,6 @@ void UAttack::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-FEventContainer UAttack::GetEvent() {
+FEventContainer& UAttack::GetEvent() {
 	return ExecuteEvent;
 }

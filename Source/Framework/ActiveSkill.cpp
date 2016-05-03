@@ -27,7 +27,7 @@ void UActiveSkill::Execute(ABaseCharacter* Executor) {
 	//TODO wait for sth and broadcast ExecuteEndEvent
 }
 
-FEventContainer UActiveSkill::GetEvent() {
+FEventContainer& UActiveSkill::GetEvent() {
 	return ExecuteEvent;
 }
 

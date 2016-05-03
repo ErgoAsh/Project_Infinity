@@ -15,14 +15,9 @@
 				"InputCore",
 				"RHI",
 				"RenderCore",
-				"ShaderCore"
+				"ShaderCore",
+				"VaRestPlugin"
 			]
-		}
-	],
-	"Plugins": [
-		{
-			"Name": "VaRestPlugin",
-			"Enabled": true
 		}
 	],
 	"TargetPlatforms": [

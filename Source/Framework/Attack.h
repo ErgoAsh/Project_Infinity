@@ -6,6 +6,8 @@
 #include "Action.h"
 #include "Attack.generated.h"
 
+class ABaseCharacter;
+
 /**
  * 
  */
@@ -23,13 +25,19 @@ class FRAMEWORK_API UAttack : public UObject, public IAction {
 public:
 	UAttack();
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 	UAnimationAsset* GetAnimation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;
 
-	UFUNCTION(Category = "Skill")
-	FEventContainer GetEvent();
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Action")
+	bool bAttackLeft;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Action")
+	bool bAttackRight;
+
+	UFUNCTION(Category = "Action")
+	FEventContainer& GetEvent();
 
 };
