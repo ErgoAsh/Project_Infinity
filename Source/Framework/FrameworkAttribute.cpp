@@ -19,6 +19,18 @@ void UFrameworkAttribute::SetBaseValue(float NewValue) {
 	Update();
 }
 
+
+void UFrameworkAttribute::SetMinimumValue(float Minimum) {
+	IsMinimumValueSet = true;
+	MinimumValue = Minimum;
+}
+
+
+void UFrameworkAttribute::SetMaximumValue(float Maximum) {
+	IsMaximumValueSet = true;
+	MaximumValue = Maximum;
+}
+
 void UFrameworkAttribute::ClearModifiers() {
 	Modifiers.Empty();
 	Update();
@@ -43,5 +55,8 @@ void UFrameworkAttribute::Update() {
 		default:
 			break;
 		}
+		//Should be added AFTER modification or during?
+		if (Value < MinimumValue) Value = MinimumValue;
+		if (Value > MaximumValue) Value = MaximumValue;
 	}
 }

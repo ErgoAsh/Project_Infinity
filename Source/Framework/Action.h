@@ -27,7 +27,7 @@ struct FEventContainer {
  * 
  */
 UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
-class UAction : public UInterface {//, public IEventContainer<FExecuteEvent> {
+class UAction : public UInterface {
 
 	GENERATED_UINTERFACE_BODY()
 

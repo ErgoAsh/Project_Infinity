@@ -6,28 +6,39 @@
 #include "Consequence.h"
 #include "Effect.generated.h"
 
-/**
- * 
- */
-UCLASS()
-class FRAMEWORK_API UEffect : public UObject, public IConsequence {
+UENUM()
+enum EEffectType {
+	BUFF,
+	DEBUFF,
+	VISUAL
+	//Anything else?
+};
 
-	GENERATED_BODY()
+UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
+class UEffect : public UConsequence {
 
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
-	FVector Location;
+	GENERATED_UINTERFACE_BODY()
 
-	UPROPERTY()
-	uint8 Range;
+};
 
-	UPROPERTY()
-	uint8 Duration;
 
-	//TArray<UModifier> Modifiers;
+class FRAMEWORK_API IEffect {
+
+	GENERATED_IINTERFACE_BODY()
 
 public:
-	UEffect();
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool Execute() override;
+	virtual bool Execute() = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	virtual EEffectType GetEffectType() = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	virtual float GetDuration() = 0;
+
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	virtual TArray<FModifier> GetModifiers() = 0;
+
+	//TODO add some theards to make the duration dissapear or something
 };

@@ -1,6 +1,7 @@
 // Copyright 1998-2014 Epic Games, Inc. All Rights Reserved.
 
 #include "Framework.h"
+#include "AnimInstanceProxy.h"
 #include "AnimNode_QueuedSequencePlayer.h"
 
 /////////////////////////////////////////////////////
@@ -27,42 +28,45 @@ void FAnimNode_QueuedSequencePlayer::Update(const FAnimationUpdateContext& Conte
 		InternalTimeAccumulator = 0;
 	}
 
-	if ((CurrentSequence != NULL) && (Context.AnimInstance->CurrentSkeleton->IsCompatible(CurrentSequence->GetSkeleton())))
+	if ((CurrentSequence != NULL) && (Context.AnimInstanceProxy->GetSkeleton()->IsCompatible(CurrentSequence->GetSkeleton())))
 	{
 		const float fTriggerTime = FMath::Max(0.f, CurrentSequence->SequenceLength - EndOfPlayEventTime);
 		if (LastInternalTimeAccumulator < fTriggerTime && InternalTimeAccumulator >= fTriggerTime)
 		{
-			UFunction* EOPFunc = Context.AnimInstance->FindFunction(EndOfPlayEvent);
+			UAnimInstance* Instance = Context.AnimInstanceProxy->GetSkelMeshComponent()->GetAnimInstance();
+			UFunction* EOPFunc = Instance->FindFunction(EndOfPlayEvent);
 			if (EOPFunc != nullptr)
 			{
-				Context.AnimInstance->ProcessEvent(EOPFunc, nullptr);
+				Instance->ProcessEvent(EOPFunc, nullptr);
 			}
 		}
 
 		const float FinalBlendWeight = Context.GetFinalBlendWeight();
 
 		// Create a tick record and fill it out
+		UAnimInstance* Instance = Context.AnimInstanceProxy->GetSkelMeshComponent()->GetAnimInstance();
 		FAnimGroupInstance* SyncGroup;
-		FAnimTickRecord& TickRecord = Context.AnimInstance->CreateUninitializedTickRecord(INDEX_NONE, /*out*/ SyncGroup);
+		FAnimTickRecord& TickRecord = Context.AnimInstanceProxy->CreateUninitializedTickRecord(INDEX_NONE, /*out*/ SyncGroup);
 
-		Context.AnimInstance->MakeSequenceTickRecord(TickRecord, CurrentSequence, false, 1.0, FinalBlendWeight, /*inout*/ InternalTimeAccumulator);
+		Context.AnimInstanceProxy->MakeSequenceTickRecord(TickRecord, CurrentSequence, false, 1.0, FinalBlendWeight, /*inout*/ InternalTimeAccumulator, *TickRecord.MarkerTickRecord);
 	}
 
 	LastInternalTimeAccumulator = InternalTimeAccumulator;
 }
 
-void FAnimNode_QueuedSequencePlayer::Evaluate(FPoseContext& Output)
-{
-	if ((CurrentSequence != NULL) && (Output.AnimInstance->CurrentSkeleton->IsCompatible(CurrentSequence->GetSkeleton())))
-	{
-		Output.AnimInstance->EvaluateAnimation(Output);
-		//Output.AnimInstance->SequenceEvaluatePose(CurrentSequence, Output.Pose, FAnimExtractContext(InternalTimeAccumulator, false));
-	}
-	else
-	{
-		Output.ResetToRefPose();
-	}
-}
+//void FAnimNode_QueuedSequencePlayer::Evaluate(FPoseContext& Output)
+//{
+//	if ((CurrentSequence != NULL) && (Output.AnimInstanceProxy->GetSkeleton()->IsCompatible(CurrentSequence->GetSkeleton())))
+//	{
+//		UAnimInstance* Instance = Output.AnimInstanceProxy->GetSkelMeshComponent()->GetAnimInstance();
+//		Instance->ParallelEvaluateAnimation(false, Output.AnimInstanceProxy->GetSkelMeshComponent()->SkeletalMesh, Atoms, Output.Curve );
+//		//Output.AnimInstance->SequenceEvaluatePose(CurrentSequence, Output.Pose, FAnimExtractContext(InternalTimeAccumulator, false));
+//	}
+//	else
+//	{
+//		Output.ResetToRefPose();
+//	}
+//}
 
 void FAnimNode_QueuedSequencePlayer::GatherDebugData(FNodeDebugData& DebugData)
 {

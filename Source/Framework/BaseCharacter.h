@@ -5,6 +5,7 @@
 #include "Loadable.h"
 #include "ScriptInterface.h"
 #include "FrameworkAttribute.h"
+#include "Effect.h"
 #include "BaseCharacter.generated.h"
 
 class UPlayerClass;
@@ -25,8 +26,9 @@ struct FActionList {
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
 	UAttack* Attack;
-	//InteractWithNPC
-	//PickUpItem
+	//Interact (NPC, special things)
+	//PickUp
+	//Cast (Spell or Skill)
 
 	FActionList();
 };
@@ -47,20 +49,40 @@ class ABaseCharacter : public ACharacter {
 public:
 	ABaseCharacter();
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
+	//Should encapsulate these Properties?
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	bool bIsDead;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	UFrameworkAttribute* Health;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UFrameworkAttribute* MaxHealth;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	UFrameworkAttribute* Mana;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	float Health;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Property")
-	UFrameworkAttribute* Stamina;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UFrameworkAttribute* MaxMana;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "BB")
-	FActionList& Action;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	float Mana;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UFrameworkAttribute* MaxStamina;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	float Stamina;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UFrameworkAttribute* Speed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UFrameworkAttribute* PhisicalDefense;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	TArray<TScriptInterface<IEffect>> AppliedEffects;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	FActionList Action;
 
 	UFUNCTION(Category = "Damage")
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;

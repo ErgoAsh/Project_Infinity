@@ -31,7 +31,7 @@ void UInventoryComponent::Drop(AItem* Item) {
 	Comp->SetOnlyOwnerSee(false);
 	Comp->bCastDynamicShadow = true;
 	Comp->CastShadow = true;
-	Comp->AttachTo(Item->GetRootComponent());
+	Comp->SetupAttachment(Item->GetRootComponent());
 	Comp->StaticMesh = Item->GetItemData().Model.Get();
 
 	FVector Loc = GetOwner()->GetActorLocation();
@@ -49,8 +49,7 @@ void UInventoryComponent::OnRegister() {
 			RightHandItem->SetOwner(GetOwner());
 			RightHandItem->MeshComp->StaticMesh = StaticMeshLel;
 			RightHandItem->bUseDefaultTraceMethod = true;
-			RightHandItem->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketR"),
-				EAttachLocation::SnapToTargetIncludingScale, true);
+			RightHandItem->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketR"));
 		}
 		Equipment.RightHand = RightHandItem;
 		RightHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
@@ -61,8 +60,7 @@ void UInventoryComponent::OnRegister() {
 			LeftHandItem->SetOwner(GetOwner());
 			LeftHandItem->MeshComp->StaticMesh = StaticMeshLel;
 			LeftHandItem->bUseDefaultTraceMethod = true;
-			LeftHandItem->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketL"),
-				EAttachLocation::SnapToTargetIncludingScale, true);
+			LeftHandItem->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketL"));
 		}
 		Equipment.LeftHand = LeftHandItem;
 		LeftHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
@@ -103,8 +101,7 @@ bool UInventoryComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 				Weapon = Cast<AWeapon>(Item);
 				if (Weapon) {
 					Equipment.RightHand = Weapon;
-					Item->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketR"),
-						EAttachLocation::SnapToTargetIncludingScale, true);
+					Item->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketR"));
 					return true;
 				}
 				return false;
@@ -113,8 +110,7 @@ bool UInventoryComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 				Weapon = Cast<AWeapon>(Item);
 				if (Weapon) {
 					Equipment.LeftHand = Weapon;
-					Item->GetRootComponent()->AttachTo(Char->GetMesh(), TEXT("WeaponSocketL"),
-						EAttachLocation::SnapToTargetIncludingScale, true);
+					Item->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketL"));
 					return false;
 				}
 				return true;
@@ -232,8 +228,8 @@ bool UInventoryComponent::HasItem(AItem* Item) {
 }
 
 void UInventoryComponent::InitializeCollision(UShapeComponent* Shape) {
-	Shape->OnComponentBeginOverlap.AddDynamic(this, &UInventoryComponent::OnComponentOverlap);
-	Shape->OnComponentEndOverlap.AddDynamic(this, &UInventoryComponent::OnComponentEndOverlap);
+	//Shape->OnComponentBeginOverlap.AddDynamic(this, &UInventoryComponent::OnComponentOverlap);
+	//Shape->OnComponentEndOverlap.AddDynamic(this, &UInventoryComponent::OnComponentEndOverlap);
 }
 
 void UInventoryComponent::InitializeInput(UInputComponent* Input) {

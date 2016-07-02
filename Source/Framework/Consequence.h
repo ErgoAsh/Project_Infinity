@@ -52,4 +52,6 @@ class FRAMEWORK_API IConsequence {
 public:
 	UFUNCTION(BlueprintCallable, Category = "Effect")
 	virtual bool Execute() = 0;
+
+	//Should add GetModifiers (or just in Effect)? Seems logic...
 };

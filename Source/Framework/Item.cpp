@@ -24,6 +24,6 @@ AItem::AItem(FItemType Data) : ItemData(Data) {
 	MeshComp->SetOnlyOwnerSee(false);
 	MeshComp->bCastDynamicShadow = true;
 	MeshComp->CastShadow = true;
-	MeshComp->AttachTo(RootComponent);
+	MeshComp->SetupAttachment(RootComponent);
 	MeshComp->StaticMesh = ItemData.Model.Get();
 }

@@ -3,12 +3,6 @@
 #include "Framework.h"
 #include "Effect.h"
 
-UEffect::UEffect() {
-
+UEffect::UEffect(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer) {
 }
-
-bool UEffect::Execute() {
-	return true;
-}
-
-

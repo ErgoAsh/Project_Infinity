@@ -17,14 +17,27 @@ class FRAMEWORK_API UFrameworkAttribute : public UObject {
 
 	GENERATED_BODY()
 
+	//Should be deleted or changed to Destination?
 	UPROPERTY(VisibleAnywhere, Category = "Property")
 	FName Name;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	float BaseValue;
+	float BaseValue = 0;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
 	float Value;
+
+	UPROPERTY(VisibleAnywhere, Category = "Property")
+	bool IsMinimumValueSet;
+
+	UPROPERTY(VisibleAnywhere, Category = "Property")
+	bool IsMaximumValueSet;
+
+	UPROPERTY(VisibleAnywhere, Category = "Property")
+	float MinimumValue;
+
+	UPROPERTY(VisibleAnywhere, Category = "Property")
+	float MaximumValue;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
 	TArray<FModifier> Modifiers;
@@ -41,6 +54,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Property")
 	void SetBaseValue(float NewValue);
+
+	UFUNCTION(BlueprintCallable, Category = "Property")
+	void SetMinimumValue(float Minimal);
+
+	UFUNCTION(BlueprintCallable, Category = "Property")
+	void SetMaximumValue(float Maximum);
 
 	UFUNCTION(BlueprintCallable, Category = "Property")
 	void SetName(FName NewName) { Name = NewName; }

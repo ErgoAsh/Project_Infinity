@@ -26,6 +26,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, Transient, Category=DoNotEdit)
 	float InternalTimeAccumulator;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	TArray<FTransform> Atoms;
+
 	UPROPERTY(transient)
 	UAnimSequenceBase* CurrentSequence;
 
@@ -46,7 +49,7 @@ public:
 	FRAMEWORK_API virtual void Initialize(const FAnimationInitializeContext& Context) override;
 	FRAMEWORK_API virtual void CacheBones(const FAnimationCacheBonesContext & Context) override;
 	FRAMEWORK_API virtual void Update(const FAnimationUpdateContext& Context) override;
-	FRAMEWORK_API virtual void Evaluate(FPoseContext& Output) override;
+	//FRAMEWORK_API virtual void Evaluate(FPoseContext& Output) override;
 	// FRAMEWORK_API virtual void OverrideAsset(UAnimationAsset* NewAsset) override;
 	FRAMEWORK_API virtual void GatherDebugData(FNodeDebugData& DebugData) override;
 	// End of FAnimNode_Base interface

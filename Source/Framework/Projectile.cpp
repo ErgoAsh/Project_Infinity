@@ -4,7 +4,7 @@
 #include "Projectile.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
-#include "Damageable.h"
+//#include "Damageable.h"
 #include "PhysicsEngine/DestructibleActor.h"
 #include "Components/DestructibleComponent.h"
 
@@ -13,7 +13,7 @@ AProjectile::AProjectile() {
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
 	CollisionComp->InitSphereRadius(5.0f);
 	CollisionComp->BodyInstance.SetCollisionProfileName("Projectile");
-	CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+	//CollisionComp->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 		// set up a notification for when this component hits something blocking
 
 		// Players can't walk on it
@@ -33,7 +33,7 @@ AProjectile::AProjectile() {
 	ProjectileMovement->Bounciness = 0.3f;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	MeshComp->AttachTo(RootComponent);
+	MeshComp->SetupAttachment(RootComponent);
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
@@ -49,10 +49,10 @@ void AProjectile::InitVelocity(const FVector& ShootDirection) {
 void AProjectile::OnHit(AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit) {
 	if ((OtherActor != NULL) && (OtherActor != this) && (OtherActor != GetOwner()) 
 			&& (OtherActor->GetOwner() != GetOwner()) && (OtherComp != NULL)) {
-		IDamageable* Damageable = Cast<IDamageable>(OtherActor);
-		if (Damageable) {
-			Damageable->TakeDamage(this, Hit);
-		}
+		//IDamageable* Damageable = Cast<IDamageable>(OtherActor);
+		//if (Damageable) {
+		//	Damageable->TakeDamage(this, Hit);
+		//}
 		ADestructibleActor* Destructible = Cast<ADestructibleActor>(OtherActor);
 		if (Destructible) {
 			if (Destructible->bCanBeDamaged) {

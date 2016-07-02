@@ -18,9 +18,10 @@ class FRAMEWORK_API AUseable : public AItem {//, public IEventContainer<FUseEven
 
 	//UPROPERTY(VisibleAnywhere, Category = "Item")
 	//UAnimationAsset* Animation;
-
+	
+	//Maybe Array
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	UEffect* Effect;
+	TScriptInterface<UEffect> Effect;
 
 public:
 	AUseable();

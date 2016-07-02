@@ -37,11 +37,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	TArray<USkill*> GetSkills();
 
+	//Move to BaseCharacter instead?
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool ApplyEffect(UEffect* Effect);
+	bool ApplyEffect(TScriptInterface<IEffect> Effect);
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool RemoveEffect(UEffect* Effect);
+	bool RemoveEffect(TScriptInterface<IEffect> Effect);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Class")
 	FText ClassName;

@@ -32,7 +32,7 @@ public:
 	void Execute(ABaseCharacter* Executor) override;
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Action")
-	bool bAttackLeft;
+	bool bAttackLeft; //May be invalid for weird enemies...
 
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Action")
 	bool bAttackRight;

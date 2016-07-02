@@ -9,7 +9,7 @@
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class FRAMEWORK_API UPropertyComponent : public UActorComponent {
 
-	GENERATED_BODY()
+	GENERATED_BODY() //TODO delete or redone this file
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
 	uint16 Health;
@@ -31,8 +31,8 @@ class FRAMEWORK_API UPropertyComponent : public UActorComponent {
 	UPROPERTY(VisibleAnywhere, Category = "Property")
 	uint16 MaxMoney;
 
-	UPROPERTY(VisibleAnywhere, Category = "Property")
-	TArray<UEffect*> Effects;
+	//UPROPERTY(VisibleAnywhere, Category = "Property")
+	//TArray<UEffect*> Effects;
 
 public:	
 	// Sets default values for this component's properties
@@ -54,6 +54,6 @@ public:
 	uint16 GetMoney() const { return Money; }
 	uint16 GetMaxMoney() const { return MaxMoney; }
 
-	TArray<UEffect*> GetEffects() const { return Effects; }
+	//TArray<UEffect*> GetEffects() const { return Effects; }
 	
 };
