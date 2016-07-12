@@ -8,3 +8,6 @@ Saved
 *.suo
 *.xcodeproj
 *.xcworkspace
+/Framework/
+/Framework/
+/Framework/

@@ -12,24 +12,24 @@ class FRAMEWORK_API UPropertyComponent : public UActorComponent {
 	GENERATED_BODY() //TODO delete or redone this file
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 Health;
+	int32 Health;
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 MaxHealth;
+	int32 MaxHealth;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 Mana;
+	int32 Mana;
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 MaxMana;
+	int32 MaxMana;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 Stamina;
+	int32 Stamina;
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 MaxStamina;
+	int32 MaxStamina;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 Money;
+	int32 Money;
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	uint16 MaxMoney;
+	int32 MaxMoney;
 
 	//UPROPERTY(VisibleAnywhere, Category = "Property")
 	//TArray<UEffect*> Effects;
@@ -42,17 +42,17 @@ public:
 	// TODO add save/load system
 	virtual void BeginPlay() override;
 
-	uint16 GetMana() const { return Mana; }
-	uint16 GetMaxMana() const { return MaxMana; }
+	int32 GetMana() const { return Mana; }
+	int32 GetMaxMana() const { return MaxMana; }
 
-	uint16 GetStamina() const { return Stamina; }
-	uint16 GetMaxStamina() const { return MaxStamina; }
+	int32 GetStamina() const { return Stamina; }
+	int32 GetMaxStamina() const { return MaxStamina; }
 
-	uint16 GetHealth() const { return Health; }
-	uint16 GetMaxHealth() const { return MaxHealth; }
+	int32 GetHealth() const { return Health; }
+	int32 GetMaxHealth() const { return MaxHealth; }
 
-	uint16 GetMoney() const { return Money; }
-	uint16 GetMaxMoney() const { return MaxMoney; }
+	int32 GetMoney() const { return Money; }
+	int32 GetMaxMoney() const { return MaxMoney; }
 
 	//TArray<UEffect*> GetEffects() const { return Effects; }
 	

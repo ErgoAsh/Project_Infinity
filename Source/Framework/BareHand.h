@@ -14,11 +14,11 @@ class FRAMEWORK_API ABareHand : public AWeapon {
 
 	GENERATED_BODY()
 
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	USphereComponent* SphereCollision;
+
 public:
 	ABareHand();
-	
-	UPROPERTY()
-	USphereComponent* SphereCollision;
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	void DamageActors();

@@ -13,7 +13,7 @@ void UMage::BeginPlay() {
 	Super::BeginPlay();
 
 	UFireBall* FireBall = NewObject<UFireBall>();
-	FireBall->GetEvent().Event.AddDynamic(this, &UMage::OnSkillExecute);
+	FireBall->GetExecuteEvent()->ToEvent().AddDynamic(this, &UMage::OnSkillExecute);
 
 	Skills.Add(FireBall);
 }

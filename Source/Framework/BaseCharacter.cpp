@@ -6,6 +6,7 @@
 #include "PlayerClass.h"
 #include "Mage.h"
 #include "Dodge.h"
+#include "DefaultAction.h"
 #include "Attack.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -14,7 +15,7 @@
 FActionList::FActionList() {
 	Dodge = NewObject<UDodge>();
 	Attack = NewObject<UAttack>();
-	//Set current action as DefaultAction from somewhere
+	DefaultAction = UDefaultAction::StaticClass()->GetDefaultObject<UDefaultAction>();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -32,9 +33,9 @@ ABaseCharacter::ABaseCharacter() : Action(FActionList()) {
 		GetMesh()->SetRelativeLocationAndRotation(FVector(1, 1, -96.0), FRotator(0, -90, 0));
 	}
 
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("AnimBlueprint'/Game/ThirdPerson/AnimBlueprint.AnimBlueprint'"));
+	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("AnimBlueprint'/Game/Mannequin/Animations/AnimBlueprint.AnimBlueprint'"));
 	if (AnimBlueprint.Object) {
-		GetMesh()->SetAnimInstanceClass((UClass*)AnimBlueprint.Object->GeneratedClass);
+		GetMesh()->SetAnimInstanceClass((UClass*) AnimBlueprint.Object->GeneratedClass);
 	}
 
 	// Configure character movement
@@ -86,7 +87,7 @@ void ABaseCharacter::BeginPlay() {
 
 void ABaseCharacter::Tick(float DeltaSeconds) {
 	//TODO move it somewhere else
-	//for (IEffect* Effect : AppliedEffects) {
+	//for (UEffect* Effect : AppliedEffects) {
 	//	if (Effect->GetEffectType() == BUFF || Effect->GetEffectType() == DEBUFF) {
 	//		for (FModifier Modifier : Effect->GetModifiers())
 	//

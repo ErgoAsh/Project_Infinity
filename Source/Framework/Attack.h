@@ -19,8 +19,8 @@ class FRAMEWORK_API UAttack : public UObject, public IAction {
 	UPROPERTY(VisibleAnywhere, Category = "Action")
 	UAnimSequence* Animation;
 
-	UPROPERTY(VisibleAnywhere, Category = "Action")
-	FEventContainer ExecuteEvent;
+	//UPROPERTY(VisibleAnywhere, Category = "Action")
+	UEventContainer* ExecuteEvent;
 
 public:
 	UAttack();
@@ -37,7 +37,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Action")
 	bool bAttackRight;
 
-	UFUNCTION(Category = "Action")
-	FEventContainer& GetEvent();
+	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FAAAEvent)
+	//FExecuteEvent& OnExecute() override;
+
+	//UPROPERTY(BlueprintAssignable, Category = "Event")
+	//FExecuteEvent Execute;
+
+	UFUNCTION(BlueprintCallable, Category = "Event")
+	UEventContainer* GetExecuteEvent() override;
 
 };

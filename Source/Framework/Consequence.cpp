@@ -5,5 +5,4 @@
 
 UConsequence::UConsequence(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer) {
-
 }

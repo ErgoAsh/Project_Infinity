@@ -8,45 +8,29 @@
 /**
  * 
  */
-UCLASS(Blueprintable)
-class FRAMEWORK_API UVisualEffect : public UClass, public IEffect {
+UCLASS(Blueprintable, BlueprintType)
+class FRAMEWORK_API UVisualEffect : public UEffect {
 
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
+	//UPROPERTY(VisibleAnywhere, Category = "Visual")
 	TAssetPtr<UParticleEmitter> Particle;
 
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
-	TArray<FModifier> Modifiers;
-
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
+	//UPROPERTY(VisibleAnywhere, Category = "Visual")
 	FVector Location; //Actor/Pawn instead or maybe add location AND actor/pawn with bool to check
 
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
+	//UPROPERTY(VisibleAnywhere, Category = "Visual")
 	uint8 Range; //Delete I think, this should be in AreaEffect or something similar
 
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
-	float Duration;
-
-	UPROPERTY(VisibleAnywhere, Category = "Visual")
-	bool IsExecuted;
+	//UPROPERTY(VisibleAnywhere, Category = "Visual")
+	bool bIsExecuted;
 
 public:
 	UVisualEffect();
 	UVisualEffect(TAssetPtr<UParticleEmitter> Particle);
 
-	//They may not work
-	//Change them later to Func_Implementation() style
+	bool Execute_Implementation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool Execute() override;
-
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	EEffectType GetEffectType() override;
-
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	float GetDuration() override;
-
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	TArray<FModifier> GetModifiers() override;
+	virtual EEffectType GetEffectType() override;
 };

@@ -7,8 +7,8 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExecuteConsequenceEvent);
 
-UENUM()
-enum EModifyType {
+UENUM(BlueprintType)
+enum class EModifyType : uint8 {
 	Add,
 	Remove,
 	Multiply,
@@ -38,7 +38,7 @@ struct FModifier {
 /**
 *
 */
-UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
+UINTERFACE(Blueprintable)
 class UConsequence : public UInterface {
 
 	GENERATED_UINTERFACE_BODY()
@@ -50,8 +50,9 @@ class FRAMEWORK_API IConsequence {
 	GENERATED_IINTERFACE_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	virtual bool Execute() = 0;
+	UFUNCTION(BlueprintNativeEvent, Category = "Effect")
+	bool Execute();
+	
 
 	//Should add GetModifiers (or just in Effect)? Seems logic...
 };

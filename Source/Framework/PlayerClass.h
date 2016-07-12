@@ -16,7 +16,7 @@ enum class EClassType : uint8 {
 	Support //TODO find better types
 };
 
-UCLASS(ABSTRACT, ClassGroup = "Properties", meta = (BlueprintComponent))
+UCLASS(Abstract, ClassGroup = "Properties", meta = (BlueprintComponent))
 class FRAMEWORK_API UPlayerClass : public UActorComponent {
 
 	GENERATED_BODY()
@@ -38,11 +38,11 @@ public:
 	TArray<USkill*> GetSkills();
 
 	//Move to BaseCharacter instead?
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool ApplyEffect(TScriptInterface<IEffect> Effect);
+	//UFUNCTION(BlueprintCallable, Category = "Effect")
+	bool ApplyEffect(UEffect* Effect);
 
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	bool RemoveEffect(TScriptInterface<IEffect> Effect);
+	//UFUNCTION(BlueprintCallable, Category = "Effect")
+	bool RemoveEffect(UEffect* Effect);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Class")
 	FText ClassName;

@@ -27,7 +27,7 @@ struct FItemType : public FTableRowBase {
 	  : Name(FName(TEXT("NULL"))),
 		Type(0),
 		Description(TEXT("DefaultItem")),
-		CanStack(false),
+		bCanStack(false),
 		Damage(0),
 		Durability(100) {};
 
@@ -59,7 +59,7 @@ struct FItemType : public FTableRowBase {
 	FString Class;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	bool CanStack;
+	bool bCanStack;
 
 	UPROPERTY(BlueprintReadOnly, Category = "Item")
 	uint8 Level;
@@ -87,7 +87,7 @@ struct FItemType : public FTableRowBase {
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class FRAMEWORK_API AItem : public AActor {
 
 	GENERATED_BODY()
@@ -98,20 +98,31 @@ class FRAMEWORK_API AItem : public AActor {
 	UPROPERTY(VisibleAnywhere, Category = "Item")
 	USphereComponent* Sphere;
 
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	uint8 Amount;
+
 public:
 	AItem() : AItem(FItemType()) {};
 	AItem(FItemType Data);
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
 	UStaticMeshComponent* MeshComp;
 
+	//TODO delete
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
 	EItemType ItemType;
 
+	//TODO delete
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
 	bool bPickAble = true;
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	FItemType& GetItemData() { return ItemData; };
+	FItemType& GetItemData() { return ItemData; }
 
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	uint8 GetItemAmount() { return Amount; }
+
+	//TODO add network authority
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void SetItemAmount(uint8 NewAmount) { Amount = NewAmount; }
 };

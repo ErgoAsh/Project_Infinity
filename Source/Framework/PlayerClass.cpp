@@ -38,12 +38,12 @@ TArray<USkill*> UPlayerClass::GetSkills() {
 	return Skills;
 }
 
-bool UPlayerClass::ApplyEffect(TScriptInterface<IEffect> Effect)
+bool UPlayerClass::ApplyEffect(UEffect* Effect)
 {
 	return false;
 }
 
-bool UPlayerClass::RemoveEffect(TScriptInterface<IEffect> Effect)
+bool UPlayerClass::RemoveEffect(UEffect* Effect)
 {
 	return false;
 }

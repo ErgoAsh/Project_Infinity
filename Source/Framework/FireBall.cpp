@@ -8,6 +8,7 @@
 UFireBall::UFireBall() {
 	SkillName = FName(TEXT("FireBall"));
 
+	//TODO delete and get from somewhere else
 	static ConstructorHelpers::FObjectFinder<UAnimSequence> Animation(TEXT(
 		"AnimSequence'/Game/Mannequin/Animations/ThirdPersonJump_Start.ThirdPersonJump_Start'"));
 	if (Animation.Succeeded()) {
@@ -15,7 +16,7 @@ UFireBall::UFireBall() {
 	}
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> Ball(TEXT(
-		"StaticMesh'/Game/ThirdPerson/SM_Rock.SM_Rock'"));
+		"StaticMesh'/Game/Geometry/Meshes/SM_Rock.SM_Rock'"));
 	if (Ball.Succeeded()) {
 		FireBallMesh = Ball.Object;
 	}

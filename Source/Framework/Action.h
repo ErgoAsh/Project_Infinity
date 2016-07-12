@@ -3,24 +3,24 @@
 #pragma once
 
 #include "Object.h"
-#include "BaseCharacter.h"
 #include "Action.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnExecuteEvent, ABaseCharacter*, Character);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnExecuteEndEvent, ABaseCharacter*, Character);
 
-//That's what I call a fcking bad workaround
+//That's what I call a bad workaround
 //Epic gave me possibility to use Dynamic Delegate as a return value
 //but it doesn't work for Dynamic MULTICAST Delegate :(
-USTRUCT()
-struct FEventContainer {
+UCLASS(NotBlueprintable)
+class UEventContainer : public UObject {
 
-	GENERATED_USTRUCT_BODY()
+	GENERATED_BODY()
 
-	UPROPERTY(BlueprintAssignable, Category = "Skill")
+public:
+	UEventContainer() {}
+
+	UPROPERTY(BlueprintAssignable, Category = "Action")
 	FOnExecuteEvent Event;
-
-	FEventContainer() {}
 };
 
 /**
@@ -45,6 +45,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	virtual void Execute(ABaseCharacter* Executor) = 0;
 	
-	UFUNCTION(Category = "Event")
-	virtual FEventContainer& GetEvent() = 0;
+	UFUNCTION(BlueprintCallable, Category = "Event")
+	virtual UEventContainer* GetExecuteEvent() = 0;
+
+	//DECLARE_EVENT_OneParam(IAction, FExecuteEvent, ABaseCharacter*)
+	//virtual FExecuteEvent& OnExecute() = 0;
+
+	//UFUNCTION(BlueprintImplementableEvent, Category = "Action")
+	//virtual void OnExecute(ABaseCharacter* Character) = 0;
 };

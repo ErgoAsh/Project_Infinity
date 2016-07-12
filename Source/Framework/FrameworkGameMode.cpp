@@ -5,7 +5,7 @@
 #include "PlayerCharacter.h"
 
 AFrameworkGameMode::AFrameworkGameMode() {
-	DefaultPawnClass = APlayerCharacter::StaticClass();
+	//DefaultPawnClass = APlayerCharacter::StaticClass();
 }
 
 void AFrameworkGameMode::PostLogin(APlayerController* NewPlayer) {

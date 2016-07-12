@@ -20,19 +20,25 @@ class FRAMEWORK_API UDodge : public UObject, public IAction {
 	UPROPERTY(VisibleAnywhere, Category = "Action")
 	UAnimSequence* Animation;
 
-	UPROPERTY(VisibleAnywhere, Category = "Action")
-	FEventContainer ExecuteEvent;
+	//UPROPERTY(VisibleAnywhere, Category = "Action")
+	UEventContainer* ExecuteEvent;
 
 public:
 	UDodge();
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 	UAnimationAsset* GetAnimation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "Skill")
+	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;
 
-	UFUNCTION(Category = "Skill")
-	FEventContainer& GetEvent();
+	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FExecuteEvent)
+	//FExecuteEvent& OnExecute() override;
+
+	//UPROPERTY(BlueprintAssignable, Category = "Event")
+	//FExecuteEvent Execute;
+
+	UFUNCTION(BlueprintCallable, Category = "Event")
+	UEventContainer* GetExecuteEvent() override;
 
 };

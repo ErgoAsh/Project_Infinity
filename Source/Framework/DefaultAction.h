@@ -16,8 +16,8 @@ class FRAMEWORK_API UDefaultAction : public UObject, public IAction {
 
 	GENERATED_BODY() //TODO add somewhere a static instance, maybe in gamemode
 
-	UPROPERTY(VisibleAnywhere, Category = "Action")
-	FEventContainer ChangeEvent;
+	//UPROPERTY(VisibleAnywhere, Category = "Action")
+	UEventContainer* ChangeEvent;
 
 public:
 	UDefaultAction();
@@ -28,7 +28,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;
 
-	UFUNCTION(BlueprintCallable, Category = "Action")
-	FEventContainer& GetEvent() override;
+	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FExecuteEvent)
+	//FExecuteEvent& OnExecute() override;
+
+	//UPROPERTY(BlueprintAssignable, Category = "Event")
+	//FExecuteEvent Execute;
+
+	UFUNCTION(BlueprintCallable, Category = "Event")
+	UEventContainer* GetExecuteEvent() override;
 
 };

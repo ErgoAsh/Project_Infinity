@@ -8,28 +8,35 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FUseEvent, ABaseCharacter*, Character);
 
+UENUM(BlueprintType)
+enum class EUseableType : uint8 {
+	FOOD,
+	DRINK,
+	SPECIAL
+};
+
 /**
  * 
  */
 UCLASS()
-class FRAMEWORK_API AUseable : public AItem {//, public IEventContainer<FUseEvent> {
+class FRAMEWORK_API AUseable : public AItem {
 
 	GENERATED_BODY()
 
-	//UPROPERTY(VisibleAnywhere, Category = "Item")
-	//UAnimationAsset* Animation;
-	
-	//Maybe Array
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	TScriptInterface<UEffect> Effect;
-
 public:
 	AUseable();
+
+	//UPROPERTY(BlueprintAssignable, Category = "Item")
+	FUseEvent UseEvent;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
+	TArray<UEffect*> Effect;
 
 	//TODO refactor Item.h structure, then think about this method
 	//UFUNCTION(BlueprintCallable, Category = "Item")	
 	//UAnimationAsset* GetAnimation();
 
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable, WithValidation, Category = "Item")
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
 	void Use(ABaseCharacter* Character);
+	void Use_Implementation(ABaseCharacter* Character);
 };

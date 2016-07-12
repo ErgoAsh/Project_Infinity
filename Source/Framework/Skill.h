@@ -2,7 +2,10 @@
 
 #pragma once
 
+#include "BaseCharacter.h"
 #include "Skill.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnSkillApplyEvent, USkill*, Skill, ABaseCharacter*, Character);
 
 UENUM(BlueprintType)
 enum class ESkillType : uint8 {
@@ -23,7 +26,25 @@ enum class EElementType : uint8 {
 	Light
 };
 
-UCLASS(ABSTRACT)
+USTRUCT()
+struct FSkillRequirements {
+
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, Category = "Skill")
+	float Mana;
+
+	UPROPERTY(VisibleAnywhere, Category = "Skill")
+	uint8 Level;
+
+	UPROPERTY(VisibleAnywhere, Category = "Skill")
+	UPlayerClass* Class;
+
+	UPROPERTY(VisibleAnywhere, Category = "Skill")
+	USkill* ParentSkill;
+};
+
+UCLASS(Abstract)
 class FRAMEWORK_API USkill : public UObject {
 
 	GENERATED_BODY()
@@ -32,6 +53,9 @@ public:
 	USkill() : USkill(FName("Skill"), FText::GetEmpty(), 1, NULL) {};
 	USkill(FName SkillName, FText Description, uint8 MaxLevel, USkill* ParentSkill);
 	~USkill();
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Skill")
+	FSkillRequirements Requirements;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
 	FName SkillName;
@@ -48,8 +72,11 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
 	ESkillType Type = ESkillType::Passive;
 
-	//UFUNCTION(BlueprintCallable, Category = "Skill")
-	//bool CanUse();
+	//UPROPERTY(VisibleAnywhere, Category = "Skill")
+	TMap<FString, UObject*> Settings;
+
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	virtual bool CheckRequirements(ABaseCharacter* Character);
 
 	//TODO move to PassiveSkill
 	UFUNCTION(BlueprintImplementableEvent, Category = "Skill")

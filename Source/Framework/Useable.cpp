@@ -3,18 +3,9 @@
 #include "Framework.h"
 #include "Useable.h"
 
-AUseable::AUseable() {
+AUseable::AUseable() {}
 
-}
-
-//UAnimationAsset* AUseable::GetAnimation() {
-//	return NULL
-//}
-
+//TODO fix networking authority
 void AUseable::Use_Implementation(ABaseCharacter* Character) {
-	return;
-}
-
-bool AUseable::Use_Validate(ABaseCharacter* Character) {
-	return true;
+	UseEvent.Broadcast(Character);
 }

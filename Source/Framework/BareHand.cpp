@@ -3,6 +3,7 @@
 #include "Framework.h"
 #include "BareHand.h"
 #include "Engine.h"
+#include "BaseCharacter.h"
 
 ABareHand::ABareHand() {
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
@@ -17,6 +18,14 @@ void ABareHand::DamageActors() {
 		FHitResult Result = Info[i].OverlapInfo;
 		if (Result.GetActor() == this || Result.GetActor() == GetOwner()
 			|| Result.GetActor()->GetOwner() == GetOwner()) continue;
+		
+		ABaseCharacter* Character = Cast<ABaseCharacter>(Result.GetActor());
+		if (Character) {
+			ABaseCharacter* OwnerCharacter = Cast<ABaseCharacter>(GetOwner());
+			if (OwnerCharacter) {
+				Character->TakeDamage(5, FDamageEvent(), OwnerCharacter->GetController(), this);
+			}
+		}
 		ADestructibleActor* Destructible = Cast<ADestructibleActor>(Result.GetActor());
 		if (Destructible) {
 			FVector Self = GetTransform().GetTranslation();

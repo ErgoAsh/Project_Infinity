@@ -4,9 +4,11 @@
 #include "Attack.h"
 #include "BaseCharacter.h"
 #include "Animation/AnimInstance.h"
+#include "Action.h"
+#include "Animation/AnimationAsset.h"
 
 UAttack::UAttack() {
-	//Animation = 
+	ExecuteEvent = NewObject<UEventContainer>();
 }
 
 UAnimationAsset* UAttack::GetAnimation() {
@@ -29,6 +31,10 @@ void UAttack::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-FEventContainer& UAttack::GetEvent() {
+// FExecuteEvent& UAttack::OnExecute() {
+// 	return Execute;
+// }
+
+UEventContainer* UAttack::GetExecuteEvent() {
 	return ExecuteEvent;
 }

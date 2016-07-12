@@ -2,10 +2,14 @@
 
 #include "Framework.h"
 #include "Dodge.h"
+#include "BaseCharacter.h"
 #include "Animation/AnimInstance.h"
 #include "Action.h"
 
 UDodge::UDodge() {
+	ExecuteEvent = NewObject<UEventContainer>();
+
+	//TODO delete and get from somewhere else
 	static ConstructorHelpers::FObjectFinder<UAnimSequence> Anim(TEXT(
 		"AnimSequence'/Game/Mannequin/Animations/ThirdPersonJump_Start.ThirdPersonJump_Start'"));
 	if (Anim.Succeeded()) {
@@ -33,6 +37,10 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 	}
 }
 
-FEventContainer& UDodge::GetEvent() {
+// FExecuteEvent& UDodge::OnExecute() {
+// 	return Execute;
+// }
+
+UEventContainer* UDodge::GetExecuteEvent() {
 	return ExecuteEvent;
 }

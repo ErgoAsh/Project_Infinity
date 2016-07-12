@@ -43,7 +43,7 @@ struct FEquipment {
 
 };
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(BlueprintType, meta=(BlueprintSpawnableComponent))
 class FRAMEWORK_API UInventoryComponent : public UActorComponent {
 
 	GENERATED_BODY()

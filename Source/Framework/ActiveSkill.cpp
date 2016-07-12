@@ -5,7 +5,9 @@
 #include "Animation/SkeletalMeshActor.h"
 #include "Engine.h"
 
-UActiveSkill::UActiveSkill() {}
+UActiveSkill::UActiveSkill() {
+	ExecuteEvent = NewObject<UEventContainer>();
+}
 
 UAnimationAsset* UActiveSkill::GetAnimation() {
 	unimplemented();
@@ -23,11 +25,15 @@ void UActiveSkill::Execute(ABaseCharacter* Executor) {
 			}
 		}
 	}
-	ExecuteEvent.Event.Broadcast(Executor);
+	ExecuteEvent->ToEvent().Broadcast(Executor);
 	//TODO wait for sth and broadcast ExecuteEndEvent
 }
 
-FEventContainer& UActiveSkill::GetEvent() {
+// FExecuteEvent& UActiveSkill::OnExecute() {
+// 	return Execute;
+// }
+
+UEventContainer* UActiveSkill::GetExecuteEvent() {
 	return ExecuteEvent;
 }
 

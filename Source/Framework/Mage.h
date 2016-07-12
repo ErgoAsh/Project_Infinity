@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS() //TODO delete and make Mage blueprint
 class FRAMEWORK_API UMage : public UPlayerClass {
 
 	GENERATED_BODY()
@@ -18,7 +18,7 @@ class FRAMEWORK_API UMage : public UPlayerClass {
 public:
 	UMage() : UPlayerClass() {
 		UFireBall* FireBall = NewObject<UFireBall>();
-		FireBall->GetEvent().Event.AddDynamic(this, &UMage::OnSkillExecute);
+		FireBall->GetExecuteEvent()->ToEvent().AddDynamic(this, &UMage::OnSkillExecute);
 		Skills.Add(FireBall);
 
 		bWantsBeginPlay = true;

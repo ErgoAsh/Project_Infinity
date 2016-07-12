@@ -17,10 +17,10 @@ public:
 	UFireBall();
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	UAnimationAsset* GetAnimation() override;
+	virtual UAnimationAsset* GetAnimation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	void Execute(ABaseCharacter* Executor) override;
+	virtual void Execute(ABaseCharacter* Executor) override;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")

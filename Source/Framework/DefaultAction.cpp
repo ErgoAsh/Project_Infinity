@@ -7,6 +7,7 @@
 #include "Action.h"
 
 UDefaultAction::UDefaultAction() {
+	ChangeEvent = NewObject<UEventContainer>();
 }
 
 UAnimationAsset* UDefaultAction::GetAnimation() {
@@ -16,9 +17,13 @@ UAnimationAsset* UDefaultAction::GetAnimation() {
 }
 
 void UDefaultAction::Execute(ABaseCharacter* Executor){
-	ChangeEvent.Event.Broadcast(Executor);
+	ChangeEvent->ToEvent().Broadcast(Executor);
 }
 
-FEventContainer& UDefaultAction::GetEvent() {
+// FExecuteEvent& UDefaultAction::OnExecute() {
+// 	return Execute;
+// }
+
+UEventContainer* UDefaultAction::GetExecuteEvent() {
 	return ChangeEvent;
 }

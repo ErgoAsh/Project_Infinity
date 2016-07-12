@@ -6,39 +6,37 @@
 #include "Consequence.h"
 #include "Effect.generated.h"
 
-UENUM()
-enum EEffectType {
-	BUFF,
-	DEBUFF,
-	VISUAL
-	//Anything else?
+UENUM(BlueprintType)
+enum class EEffectType : uint8 {
+	BUFF   UMETA(DisplayName = "Buff"),
+	DEBUFF UMETA(DisplayName = "Debuff"),
+	VISUAL UMETA(DisplayName = "Visual")
 };
 
-UINTERFACE(Blueprintable, meta = (CannotImplementInterfaceInBlueprint))
-class UEffect : public UConsequence {
+UCLASS(Abstract, Blueprintable, BlueprintType)
+class FRAMEWORK_API UEffect : public UObject, public IConsequence {
 
-	GENERATED_UINTERFACE_BODY()
+	GENERATED_BODY()
 
-};
+	UPROPERTY(VisibleAnywhere, Category = "Effect")
+	float Duration;
 
-
-class FRAMEWORK_API IEffect {
-
-	GENERATED_IINTERFACE_BODY()
+	//UPROPERTY(VisibleAnywhere, Category = "Effect")
+	TArray<FModifier> Modifiers;
 
 public:
+	UEffect();
+
+	virtual bool Execute_Implementation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	virtual bool Execute() = 0;
+	virtual EEffectType GetEffectType(); //Why =0 doesn't work?
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	virtual EEffectType GetEffectType() = 0;
+	virtual float GetDuration() { return Duration; }
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	virtual float GetDuration() = 0;
-
-	UFUNCTION(BlueprintCallable, Category = "Effect")
-	virtual TArray<FModifier> GetModifiers() = 0;
+	virtual TArray<FModifier> GetModifiers() { return Modifiers; }
 
 	//TODO add some theards to make the duration dissapear or something
 };

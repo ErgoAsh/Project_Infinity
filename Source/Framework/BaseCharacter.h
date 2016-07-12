@@ -12,6 +12,7 @@ class UPlayerClass;
 class IAction;
 class UDodge;
 class UAttack;
+class UDefaultAction;
 
 USTRUCT()
 struct FActionList {
@@ -22,10 +23,14 @@ struct FActionList {
 	TScriptInterface<IAction> CurrentAction;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
+	UDefaultAction* DefaultAction;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
 	UDodge* Dodge;
 	
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
 	UAttack* Attack;
+
 	//Interact (NPC, special things)
 	//PickUp
 	//Cast (Spell or Skill)
@@ -33,7 +38,7 @@ struct FActionList {
 	FActionList();
 };
 
-UCLASS(config=Game)
+UCLASS(Blueprintable, config=Game)
 class ABaseCharacter : public ACharacter {
 
 	GENERATED_BODY()
@@ -58,19 +63,19 @@ public:
 	UFrameworkAttribute* MaxHealth;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
-	float Health;
+	int32 Health;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	UFrameworkAttribute* MaxMana;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
-	float Mana;
+	int32 Mana;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	UFrameworkAttribute* MaxStamina;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
-	float Stamina;
+	int32 Stamina;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	UFrameworkAttribute* Speed;
@@ -78,16 +83,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	UFrameworkAttribute* PhisicalDefense;
 
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	TArray<UEffect*> AppliedEffects;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
-	TArray<TScriptInterface<IEffect>> AppliedEffects;
+	uint8 Level;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	FActionList Action;
 
-	UFUNCTION(Category = "Damage")
 	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	UFUNCTION(Category = "Damage")
 	float InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:

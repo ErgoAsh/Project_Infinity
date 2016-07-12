@@ -28,10 +28,10 @@ class FRAMEWORK_API UFrameworkAttribute : public UObject {
 	float Value;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	bool IsMinimumValueSet;
+	bool bIsMinimumValueSet;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
-	bool IsMaximumValueSet;
+	bool bIsMaximumValueSet;
 
 	UPROPERTY(VisibleAnywhere, Category = "Property")
 	float MinimumValue;

@@ -8,9 +8,6 @@
 #include "BaseCharacter.h"
 #include "ActiveSkill.generated.h"
 
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEvent, ABaseCharacter*, Character);
-//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExecuteEndEvent, ABaseCharacter*, Character);
-
 /**
  * 
  */
@@ -20,9 +17,9 @@ class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, Category = "Skill")
-	FEventContainer ExecuteEvent;
+	UEventContainer* ExecuteEvent;
 
-	UPROPERTY(BlueprintAssignable, Category = "Skill")
+	//UPROPERTY(BlueprintAssignable, Category = "Skill")
 	FOnExecuteEndEvent ExecuteEndEvent;
 
 public:
@@ -42,7 +39,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	virtual UAnimationAsset* GetAnimation() override;
 
-	UFUNCTION(Category = "Skill")
-	FEventContainer& GetEvent() override;
+	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FExecuteEvent)
+	//FExecuteEvent& OnExecute() override;
+
+	//UPROPERTY(BlueprintAssignable, Category = "Event")
+	//FExecuteEvent Execute;
+
+	UFUNCTION(BlueprintCallable, Category = "Event")
+	UEventContainer* GetExecuteEvent() override;
 
 };
