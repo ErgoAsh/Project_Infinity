@@ -73,6 +73,8 @@ public:
 	UInventoryComponent() : UInventoryComponent(FEquipment()) {};
 	UInventoryComponent(FEquipment Load);
 
+	virtual void BeginPlay() override;
+
 	virtual void OnRegister() override;
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")

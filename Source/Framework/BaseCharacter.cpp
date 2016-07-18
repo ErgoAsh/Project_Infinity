@@ -4,10 +4,11 @@
 #include "BaseCharacter.h"
 #include "Engine.h"
 #include "PlayerClass.h"
-#include "Mage.h"
 #include "Dodge.h"
 #include "DefaultAction.h"
 #include "Attack.h"
+#include "PassiveSkill.h"
+#include "ActiveSkill.h"
 
 //////////////////////////////////////////////////////////////////////////
 // FActionList
@@ -16,27 +17,15 @@ FActionList::FActionList() {
 	Dodge = NewObject<UDodge>();
 	Attack = NewObject<UAttack>();
 	DefaultAction = UDefaultAction::StaticClass()->GetDefaultObject<UDefaultAction>();
+	CurrentAction = DefaultAction;
 }
 
 //////////////////////////////////////////////////////////////////////////
 // AFrameworkCharacter
 
-ABaseCharacter::ABaseCharacter() : Action(FActionList()) {
+ABaseCharacter::ABaseCharacter() {
 	//TODO Move to PlayerCharacter
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-
-	//TODO change it to choose it using Save&Load
-	//TODO move to PlayerCharacter!
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SMesh(TEXT("SkeletalMesh'/Game/Mannequin/Character/Mesh/SK_Mannequin.SK_Mannequin'"));
-	if (SMesh.Succeeded()) {
-		GetMesh()->SetSkeletalMesh(SMesh.Object);
-		GetMesh()->SetRelativeLocationAndRotation(FVector(1, 1, -96.0), FRotator(0, -90, 0));
-	}
-
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> AnimBlueprint(TEXT("AnimBlueprint'/Game/Mannequin/Animations/AnimBlueprint.AnimBlueprint'"));
-	if (AnimBlueprint.Object) {
-		GetMesh()->SetAnimInstanceClass((UClass*) AnimBlueprint.Object->GeneratedClass);
-	}
 
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true; // Character moves in the direction of input...	
@@ -45,14 +34,18 @@ ABaseCharacter::ABaseCharacter() : Action(FActionList()) {
 	GetCharacterMovement()->AirControl = 0.2f;
 
 	// Load a player class
-	PlayerClass = CreateDefaultSubobject<UMage>(TEXT("PlayerClass"));
-	PlayerClass->bAutoActivate = true;
+	if (*PClass != nullptr) {
+		PlayerClass = (UPlayerClass*) CreateDefaultSubobject(TEXT("PlayerClass"), *PClass, *PClass, true, false, false);
+		PlayerClass->bAutoActivate = true;
+	}
 
 	// Load a player inventory
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("PlayerInventory"));
 	AddComponent(FName("PlayerInventory"), false, FTransform(), InventoryComponent);
 	InventoryComponent->InitializeCollision(GetCapsuleComponent());
 	InventoryComponent->bAutoActivate = true;
+
+	Action = FActionList();
 
 	// Load a player variables
 	MaxHealth = NewObject<UFrameworkAttribute>();
@@ -74,30 +67,95 @@ ABaseCharacter::ABaseCharacter() : Action(FActionList()) {
 	//Phisical defense
 	//Elemental defense should be also added, I think
 	//Need to add distinguish between TakeDamage types
-	PhisicalDefense = NewObject<UFrameworkAttribute>();
-	PhisicalDefense->SetMinimumValue(-100);
-	PhisicalDefense->SetMaximumValue(100);
-	PhisicalDefense->SetBaseValue(0);
+	PhysicalDefense = NewObject<UFrameworkAttribute>();
+	PhysicalDefense->SetMinimumValue(-100);
+	PhysicalDefense->SetMaximumValue(100);
+	PhysicalDefense->SetBaseValue(0);
 }
 
 void ABaseCharacter::BeginPlay() {
+	// Load a player class
+	if (PlayerClass != nullptr && *PClass != nullptr) {
+		PlayerClass = (UPlayerClass*) CreateDefaultSubobject(TEXT("PlayerClass"), *PClass, *PClass, true, false, false);
+		PlayerClass->bAutoActivate = true;
+	}
+
+	if (PlayerClass) {
+		for (USkill* Skill : PlayerClass->GetSkills()) {
+			Skill->BeginPlay();
+
+			UPassiveSkill* Passive = Cast<UPassiveSkill>(Skill);
+			if (Passive) {
+				Passive->Apply(this);
+				continue;
+			}
+			UActiveSkill* Active = Cast<UActiveSkill>(Skill);
+			if (Active) {
+				Active->GetExecuteEvent()->Event.AddDynamic(this, &ABaseCharacter::ApplyAction);
+				Active->GetExecuteEvent()->EndEvent.AddDynamic(this, &ABaseCharacter::UnApplyAction);
+			}
+		}
+	}
+
 	//TODO load inventory
 	//TODO Or get it by some EntityDatabase or sth
+	Super::BeginPlay();
+}
+
+void ABaseCharacter::ApplyAction(ABaseCharacter* BaseCharacter, TScriptInterface<IAction> ActionInterface) {
+	Action.CurrentAction == ActionInterface;
+	UActiveSkill* Active = Cast<UActiveSkill>(ActionInterface.GetObject());
+	if (Active != nullptr) {
+		ApplyEffects(Active->GetConsequences());
+	}
+}
+
+void ABaseCharacter::UnApplyAction(ABaseCharacter* BaseCharacter, TScriptInterface<IAction> ActionInterface) {
+	Action.CurrentAction == Action.DefaultAction;
 }
 
 void ABaseCharacter::Tick(float DeltaSeconds) {
-	//TODO move it somewhere else
-	//for (UEffect* Effect : AppliedEffects) {
-	//	if (Effect->GetEffectType() == BUFF || Effect->GetEffectType() == DEBUFF) {
-	//		for (FModifier Modifier : Effect->GetModifiers())
-	//
-	//			switch (Effect->GetName()) {
-	//				case "Phisical": PhisicalDefense->AddModifier(Modifier)
-	//				case "Magic": //ADD to magic
-	//			}
-	//		}
-	//	}
-	//}
+	//TODO
+}
+
+void ABaseCharacter::UpdateEffects() {
+	PhysicalDefense->ClearModifiers();
+	Speed->ClearModifiers();
+	MaxHealth->ClearModifiers();
+	MaxMana->ClearModifiers();
+	MaxStamina->ClearModifiers();
+	for (UEffect* Effect : AppliedEffects) {
+		if (Effect->GetEffectType() == EEffectType::BUFF || Effect->GetEffectType() == EEffectType::DEBUFF) {
+			for (FModifier& Modifier : Effect->GetModifiers()) {
+				//TODO change to if.else
+
+				//switch (Effect->GetName()) { //What if there is multiple effects? We should stack but how?
+				//case "Physical": PhysicalDefense->AddModifier(Modifier); 
+				//case "Speed": Speed->AddModifier(Modifier);
+				//case "Health": MaxHealth->AddModifier(Modifier);
+				//case "Mana": MaxMana->AddModifier(Modifier);
+				//case "Stamina": MaxStamina->AddModifier(Modifier);
+				//case "Magic": //ADD to magic
+				//case "Stamina_Regeneration": //ADD regeneration theard and attribute
+				//}
+			}
+		}
+	}
+}
+
+void ABaseCharacter::ApplyEffects(TArray<UEffect*> Effects) {
+	AppliedEffects.Append(Effects);
+	UpdateEffects();
+}
+
+void ABaseCharacter::ApplyEffect(UEffect* Effect) {
+	AppliedEffects.Add(Effect);
+	UpdateEffects();
+}
+
+void ABaseCharacter::RemoveEffect(UEffect* Effect) {
+	AppliedEffects.Remove(Effect);
+	UpdateEffects();
 }
 
 float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) {
@@ -105,7 +163,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	//if Magic (if both Magic & Phisical, make two TakeDamage occurances)
 	
 	//if Phisical
-	Health = Health - (DamageAmount - DamageAmount * PhisicalDefense->GetValue());
+	Health = Health - (DamageAmount - DamageAmount * PhysicalDefense->GetValue());
 
 	GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White, TEXT("TakeDamage"));
 	if (Health <= 0) {
@@ -113,6 +171,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 		GetMesh()->SetSimulatePhysics(true);
 		//TODO delete AI if has any
 		//TODO delete PlayerController
+		//TODO add thread deleting mesh and rest in x time
 	}
 	return Health;
 }

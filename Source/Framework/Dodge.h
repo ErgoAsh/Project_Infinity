@@ -12,16 +12,17 @@ class ABaseCharacter;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class FRAMEWORK_API UDodge : public UObject, public IAction {
 
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, Category = "Action")
-	UAnimSequence* Animation;
-
-	//UPROPERTY(VisibleAnywhere, Category = "Action")
 	UEventContainer* ExecuteEvent;
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Action")
+	TAssetPtr<UAnimSequence> Animation;
 
 public:
 	UDodge();
@@ -31,12 +32,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;
-
-	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FExecuteEvent)
-	//FExecuteEvent& OnExecute() override;
-
-	//UPROPERTY(BlueprintAssignable, Category = "Event")
-	//FExecuteEvent Execute;
 
 	UFUNCTION(BlueprintCallable, Category = "Event")
 	UEventContainer* GetExecuteEvent() override;

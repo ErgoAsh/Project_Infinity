@@ -8,22 +8,13 @@
 
 UDodge::UDodge() {
 	ExecuteEvent = NewObject<UEventContainer>();
-
-	//TODO delete and get from somewhere else
-	static ConstructorHelpers::FObjectFinder<UAnimSequence> Anim(TEXT(
-		"AnimSequence'/Game/Mannequin/Animations/ThirdPersonJump_Start.ThirdPersonJump_Start'"));
-	if (Anim.Succeeded()) {
-		Animation = Anim.Object;
-	}
 }
 
 UAnimationAsset* UDodge::GetAnimation() {
-	return (UAnimationAsset*) Animation;
+	return Animation.Get();
 }
 
 void UDodge::Execute(ABaseCharacter* Executor) {
-	//Add UPropertyComponent
-	UE_LOG(Debugg, Warning, TEXT("Lel"));
 	if (!Executor->GetMovementComponent()->IsFalling()) {
 		Executor->LaunchCharacter((Executor->GetActorForwardVector() + FVector(0, 0, 0.25)) * -3000, true, true);
 		if (GetAnimation()) {
@@ -35,6 +26,7 @@ void UDodge::Execute(ABaseCharacter* Executor) {
 			}
 		}
 	}
+	ExecuteEvent->Event.Broadcast(Executor, this);
 }
 
 // FExecuteEvent& UDodge::OnExecute() {

@@ -9,15 +9,18 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class FRAMEWORK_API USingleton : public UObject {
 
 	GENERATED_BODY()
 	
-	UPROPERTY(VisibleAnywhere, Category = "Game")
+public:
+	USingleton();
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Game")
 	UDataTable* ItemData;
 	
-	UPROPERTY(VisibleAnywhere, Category = "Game")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Game")
 	UDataTable* EffectData;
 	
 };

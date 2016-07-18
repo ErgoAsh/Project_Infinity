@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS(Blueprintable, ABSTRACT)
+UCLASS(Abstract, Blueprintable, BlueprintType)
 class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 
 	GENERATED_BODY()
@@ -19,31 +19,30 @@ class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 	UPROPERTY(VisibleAnywhere, Category = "Skill")
 	UEventContainer* ExecuteEvent;
 
-	//UPROPERTY(BlueprintAssignable, Category = "Skill")
-	FOnExecuteEndEvent ExecuteEndEvent;
+	UPROPERTY(VisibleAnywhere, Category = "Skill") //TODO spawn with TSubclassOf<UEffect> (not IConsequence unfortunately)
+	TArray<UEffect*> ConsequenceEffects; //TScript<IConsequence>?
+
+protected:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
+	TAssetPtr<UAnimationAsset> Animation;
 
 public:
 	UActiveSkill();
 
-	//TODO Make them attribute
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
 	uint8 ManaCost;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
 	uint8 Cooldown;
+
+	UFUNCTION(BlueprintCallable, Category = "Skill")
+	TArray<UEffect*> GetConsequences();
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	virtual void Execute(ABaseCharacter* Executor) override;
 
-	//Make it pure again
 	UFUNCTION(BlueprintCallable, Category = "Skill")
 	virtual UAnimationAsset* GetAnimation() override;
-
-	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FExecuteEvent)
-	//FExecuteEvent& OnExecute() override;
-
-	//UPROPERTY(BlueprintAssignable, Category = "Event")
-	//FExecuteEvent Execute;
 
 	UFUNCTION(BlueprintCallable, Category = "Event")
 	UEventContainer* GetExecuteEvent() override;

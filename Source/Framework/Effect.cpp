@@ -6,7 +6,7 @@
 UEffect::UEffect() {}
 
 bool UEffect::Execute_Implementation() {
-	return false;
+	return false; //What to do here?
 }
 
 EEffectType UEffect::GetEffectType() {

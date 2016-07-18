@@ -14,7 +14,7 @@ class UDodge;
 class UAttack;
 class UDefaultAction;
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FActionList {
 
 	GENERATED_USTRUCT_BODY()
@@ -31,24 +31,25 @@ struct FActionList {
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Skill")
 	UAttack* Attack;
 
+	//TODO TArray<TSubclassOf<IAction>> to add support for Blueprint?
+
 	//Interact (NPC, special things)
 	//PickUp
-	//Cast (Spell or Skill)
 
 	FActionList();
 };
 
-UCLASS(Blueprintable, config=Game)
+UCLASS(Blueprintable, BlueprintType, config=Game)
 class ABaseCharacter : public ACharacter {
 
 	GENERATED_BODY()
 
 	/** Inventory */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Properties, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	class UInventoryComponent* InventoryComponent;
 
 	/** Class */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Properties, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties", meta = (AllowPrivateAccess = "true"))
 	class UPlayerClass* PlayerClass;
 
 public:
@@ -57,9 +58,9 @@ public:
 	//Should encapsulate these Properties?
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
-	bool bIsDead;
+	bool bIsDead = false;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties") //TODO move max to PlayerClass
 	UFrameworkAttribute* MaxHealth;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
@@ -81,9 +82,9 @@ public:
 	UFrameworkAttribute* Speed;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
-	UFrameworkAttribute* PhisicalDefense;
+	UFrameworkAttribute* PhysicalDefense;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	TArray<UEffect*> AppliedEffects;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
@@ -92,18 +93,39 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
 	FActionList Action;
 
-	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	void UpdateEffects();
 
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	void ApplyEffects(TArray<UEffect*> Effects);
+
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	void ApplyEffect(UEffect* Effect);
+
+	UFUNCTION(BlueprintCallable, Category = "Effect")
+	void RemoveEffect(UEffect* Effect);
+
+	float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 	float InternalTakePointDamage(float Damage, FPointDamageEvent const& PointDamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Properties")
+	TSubclassOf<UPlayerClass> PClass;
+
+private:
+	UFUNCTION(Category = "Action")
+	void ApplyAction(ABaseCharacter* BaseCharacter, TScriptInterface<IAction> ActionInterface);
+
+	UFUNCTION(Category = "Action")
+	void UnApplyAction(ABaseCharacter* BaseCharacter, TScriptInterface<IAction> ActionInterface);
+
 public:
 	/** Returns UInventoryComponent subobject **/
 	FORCEINLINE class UInventoryComponent* GetInventoryComponent() const { return InventoryComponent; }
 	/** Returns UPlayerClass subobject **/
-	FORCEINLINE class UPlayerClass* GetPlayerClass() const { return PlayerClass; }
+	FORCEINLINE class UPlayerClass* GetPlayerClass() const { return PlayerClass; } //Delete?
 };
 

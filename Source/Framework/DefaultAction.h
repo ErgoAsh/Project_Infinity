@@ -11,12 +11,12 @@ class ABaseCharacter;
 /**
  * 
  */
-UCLASS()
+UCLASS(NotBlueprintable)
 class FRAMEWORK_API UDefaultAction : public UObject, public IAction {
 
-	GENERATED_BODY() //TODO add somewhere a static instance, maybe in gamemode
+	GENERATED_BODY()
 
-	//UPROPERTY(VisibleAnywhere, Category = "Action")
+	UPROPERTY(VisibleAnywhere, Category = "Action")
 	UEventContainer* ChangeEvent;
 
 public:
@@ -27,12 +27,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;
-
-	//DECLARE_DERIVED_EVENT(UAttack, IAction::FExecuteEvent, FExecuteEvent)
-	//FExecuteEvent& OnExecute() override;
-
-	//UPROPERTY(BlueprintAssignable, Category = "Event")
-	//FExecuteEvent Execute;
 
 	UFUNCTION(BlueprintCallable, Category = "Event")
 	UEventContainer* GetExecuteEvent() override;

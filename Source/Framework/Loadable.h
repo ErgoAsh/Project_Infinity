@@ -21,7 +21,7 @@ class FRAMEWORK_API ILoadable {
 
 public:
 
-	//UFUNCTION(BlueprintCallable, Category = "Property")
+	//UFUNCTION(BlueprintCallable, Category = "Properties")
 	//virtual bool Load(UVaRestJsonObject* JsonObject) = 0;
 
 };

@@ -3,6 +3,6 @@
 #include "Framework.h"
 #include "Singleton.h"
 
+USingleton::USingleton() {
 
-
-
+}

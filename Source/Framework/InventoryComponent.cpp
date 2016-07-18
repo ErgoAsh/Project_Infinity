@@ -13,6 +13,35 @@ UInventoryComponent::UInventoryComponent(FEquipment Load) : Equipment(Load) {
 	Clear();
 }
 
+void UInventoryComponent::BeginPlay() {
+	ABaseCharacter* Char = Cast<ABaseCharacter>(GetOwner());
+	if (Char) {
+		if (!RightHandItem) {
+			RightHandItem = (AWeapon*)GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass());
+			RightHandItem->SetOwner(GetOwner());
+			RightHandItem->MeshComp->StaticMesh = StaticMeshLel;
+			RightHandItem->bUseDefaultTraceMethod = true;
+			RightHandItem->GetRootComponent()->AttachToComponent(Char->GetMesh(),
+				FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false), TEXT("WeaponSocketR"));
+		}
+		Equipment.RightHand = RightHandItem;
+		RightHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
+		//RightHandItem->MeshComp->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
+
+		if (!LeftHandItem) {
+			LeftHandItem = (AWeapon*)GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass());
+			LeftHandItem->SetOwner(GetOwner());
+			LeftHandItem->MeshComp->StaticMesh = StaticMeshLel;
+			LeftHandItem->bUseDefaultTraceMethod = true;
+			RightHandItem->GetRootComponent()->AttachToComponent(Char->GetMesh(),
+				FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false), TEXT("WeaponSocketL"));
+		}
+		Equipment.LeftHand = LeftHandItem;
+		LeftHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
+		//LeftHandItem->MeshComp->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
+	}
+}
+
 void UInventoryComponent::PickUp() {
 	for (int32 i = 0; i < ItemsInRange.Num(); i++) {
 		if (!ItemsInRange[i]) continue;
@@ -31,7 +60,7 @@ void UInventoryComponent::Drop(AItem* Item) {
 	Comp->SetOnlyOwnerSee(false);
 	Comp->bCastDynamicShadow = true;
 	Comp->CastShadow = true;
-	Comp->SetupAttachment(Item->GetRootComponent());
+	Comp->AttachToComponent(Item->GetRootComponent(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
 	Comp->StaticMesh = Item->GetItemData().Model.Get();
 
 	FVector Loc = GetOwner()->GetActorLocation();
@@ -41,31 +70,6 @@ void UInventoryComponent::Drop(AItem* Item) {
 
 void UInventoryComponent::OnRegister() {
 	Super::OnRegister();
-
-	ABaseCharacter* Char = Cast<ABaseCharacter>(GetOwner());
-	if (Char) {
-		if (!RightHandItem) {
-			RightHandItem = (AWeapon*)GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass());
-			RightHandItem->SetOwner(GetOwner());
-			RightHandItem->MeshComp->StaticMesh = StaticMeshLel;
-			RightHandItem->bUseDefaultTraceMethod = true;
-			RightHandItem->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketR"));
-		}
-		Equipment.RightHand = RightHandItem;
-		RightHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
-		//RightHandItem->MeshComp->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
-
-		if (!LeftHandItem) {
-			LeftHandItem = (AWeapon*)GetWorld()->SpawnActor<AWeapon>(AWeapon::StaticClass());
-			LeftHandItem->SetOwner(GetOwner());
-			LeftHandItem->MeshComp->StaticMesh = StaticMeshLel;
-			LeftHandItem->bUseDefaultTraceMethod = true;
-			LeftHandItem->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketL"));
-		}
-		Equipment.LeftHand = LeftHandItem;
-		LeftHandItem->MeshComp->BodyInstance.SetCollisionProfileName("OverlapAll");
-		//LeftHandItem->MeshComp->SetCollisionResponseToChannel(ECC_PhysicsBody, ECR_Overlap);
-	}
 }
 
 AItem* UInventoryComponent::Get(EInventoryContainerSlot ItemSlot) {
@@ -101,7 +105,8 @@ bool UInventoryComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 				Weapon = Cast<AWeapon>(Item);
 				if (Weapon) {
 					Equipment.RightHand = Weapon;
-					Item->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketR"));
+					Item->GetRootComponent()->AttachToComponent(Char->GetMesh(),
+						FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false), TEXT("WeaponSocketR"));
 					return true;
 				}
 				return false;
@@ -110,7 +115,8 @@ bool UInventoryComponent::Set(EInventoryContainerSlot ItemSlot, AItem* Item) {
 				Weapon = Cast<AWeapon>(Item);
 				if (Weapon) {
 					Equipment.LeftHand = Weapon;
-					Item->GetRootComponent()->SetupAttachment(Char->GetMesh(), TEXT("WeaponSocketL"));
+					Item->GetRootComponent()->AttachToComponent(Char->GetMesh(),
+						FAttachmentTransformRules(EAttachmentRule::SnapToTarget, false), TEXT("WeaponSocketL"));
 					return false;
 				}
 				return true;

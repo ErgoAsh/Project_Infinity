@@ -22,18 +22,18 @@ struct FModifier {
 
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Property")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Properties")
 	float AmountModified;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Property")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Properties")
 	TEnumAsByte<EModifyType> Type;
-	
-	FORCEINLINE bool operator==(const FModifier& Other) {
-		return (AmountModified == Other.AmountModified && Type == Other.Type);
-	}
 
 	FModifier() {};
 };
+
+FORCEINLINE bool operator==(const FModifier& A, const FModifier& B) {
+	return (A.AmountModified == B.AmountModified && A.Type == B.Type);
+}
 
 /**
 *
@@ -51,8 +51,8 @@ class FRAMEWORK_API IConsequence {
 
 public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Effect")
-	bool Execute();
-	
+	bool Execute(); //What exactly it should do...
+	//More arguments?
 
 	//Should add GetModifiers (or just in Effect)? Seems logic...
 };

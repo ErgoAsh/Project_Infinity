@@ -8,7 +8,7 @@
 /**
  * 
  */
-UCLASS(Blueprintable)
+UCLASS(Blueprintable, BlueprintType)
 class FRAMEWORK_API UFireBall : public UActiveSkill {
 	
 	GENERATED_BODY()
@@ -17,17 +17,11 @@ public:
 	UFireBall();
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	virtual UAnimationAsset* GetAnimation() override;
-
-	UFUNCTION(BlueprintCallable, Category = "Skill")
 	virtual void Execute(ABaseCharacter* Executor) override;
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
-	UAnimSequence* Property;
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
-	UStaticMesh* FireBallMesh;
+	TAssetPtr<UStaticMesh> FireBallMesh;
 
 	UPROPERTY(EditAnywhere, Category = "Skill")
 	uint8 Damage;

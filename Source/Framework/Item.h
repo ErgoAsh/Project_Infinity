@@ -13,6 +13,7 @@ enum class EItemType : uint8 {
 	OTHER UMETA(DisplayName = "Other"),
 	USEABLE UMETA(DisplayName = "Usable"),
 	WEAPON UMETA(DisplayName = "Weapon"),
+	CATALYST UMETA(DisplayName = "Catalyst"),
 	ARMOR UMETA(DisplayName = "Armor"),
 	MATERIAL UMETA(DisplayName = "Material"),
 	TOOL UMETA(DisplayName = "Tool")
@@ -36,9 +37,11 @@ struct FItemType : public FTableRowBase {
 		case 0: return EItemType::OTHER;
 		case 1: return EItemType::USEABLE;
 		case 2: return EItemType::WEAPON;
-		case 3: return EItemType::ARMOR;
-		case 4: return EItemType::MATERIAL;
-		case 5: return EItemType::TOOL;
+		case 3: return EItemType::CATALYST;
+		case 4: return EItemType::ARMOR;
+		case 5: return EItemType::MATERIAL;
+		case 6: return EItemType::TOOL;
+
 		default: return EItemType::OTHER;
 		}
 	}

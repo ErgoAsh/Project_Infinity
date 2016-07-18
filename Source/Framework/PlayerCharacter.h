@@ -10,7 +10,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class FRAMEWORK_API APlayerCharacter : public ABaseCharacter {
 
 	GENERATED_BODY()	
@@ -38,6 +38,11 @@ public:
 	float BaseLookUpRate;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	int32 MaxMoney;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	int32 Money;
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);

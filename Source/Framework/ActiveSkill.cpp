@@ -10,8 +10,11 @@ UActiveSkill::UActiveSkill() {
 }
 
 UAnimationAsset* UActiveSkill::GetAnimation() {
-	unimplemented();
-	return NULL;
+	return Animation.Get();
+}
+
+TArray<UEffect*> UActiveSkill::GetConsequences() {
+	return ConsequenceEffects;
 }
 
 void UActiveSkill::Execute(ABaseCharacter* Executor) {
@@ -25,7 +28,7 @@ void UActiveSkill::Execute(ABaseCharacter* Executor) {
 			}
 		}
 	}
-	ExecuteEvent->ToEvent().Broadcast(Executor);
+	ExecuteEvent->Event.Broadcast(Executor, this);
 	//TODO wait for sth and broadcast ExecuteEndEvent
 }
 

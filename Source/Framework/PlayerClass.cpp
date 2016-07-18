@@ -9,23 +9,19 @@ UPlayerClass::UPlayerClass() {
 	bWantsBeginPlay = true;
 }
 
-void UPlayerClass::BeginPlay() {
-	for (int32 i = 0; i < Skills.Num(); i++) {
-		Skills[i]->Apply();
-	}
 
+void UPlayerClass::BeginPlay() {
+	for (TSubclassOf<USkill> SkillClass : SkillClasses) {
+		USkill* Skill = NewObject<USkill>(this, *SkillClass);
+		if (Skill != nullptr) {
+			Skills.Add(Skill);
+		}
+	}
 	Super::BeginPlay();
 }
 
-//bool UPlayerClass::RegisterSkill(USkill* Skill) {
-//	IAction* SkillAction = Cast<IAction>(Skill);
-//	if (SkillAction) {
-//		ExecuteEvent.AddUObject((UActiveSkill*) Skill, &UActiveSkill::Execute);
-//	}
-//	return true;
-//}
 
-USkill* UPlayerClass::GetSkill(FName Name) {
+USkill* UPlayerClass::GetSkill(FString Name) { //Reference?
 	for (USkill* Skill : Skills) {
 		if (Name.Compare(Skill->SkillName) == 0) {
 			return Skill;
@@ -37,14 +33,3 @@ USkill* UPlayerClass::GetSkill(FName Name) {
 TArray<USkill*> UPlayerClass::GetSkills() {
 	return Skills;
 }
-
-bool UPlayerClass::ApplyEffect(UEffect* Effect)
-{
-	return false;
-}
-
-bool UPlayerClass::RemoveEffect(UEffect* Effect)
-{
-	return false;
-}
-

@@ -5,8 +5,8 @@
 #include "Object.h"
 #include "Action.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnExecuteEvent, ABaseCharacter*, Character);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnExecuteEndEvent, ABaseCharacter*, Character);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnExecuteEvent, ABaseCharacter*, Character, TScriptInterface<IAction>, Action);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnExecuteEndEvent, ABaseCharacter*, Character, TScriptInterface<IAction>, Action);
 
 //That's what I call a bad workaround
 //Epic gave me possibility to use Dynamic Delegate as a return value
@@ -19,8 +19,11 @@ class UEventContainer : public UObject {
 public:
 	UEventContainer() {}
 
-	UPROPERTY(BlueprintAssignable, Category = "Action")
+	UPROPERTY(BlueprintAssignable, Category = "Event")
 	FOnExecuteEvent Event;
+
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FOnExecuteEndEvent EndEvent;
 };
 
 /**
@@ -40,17 +43,11 @@ class FRAMEWORK_API IAction {
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	virtual UAnimationAsset* GetAnimation() = 0;
+	virtual UAnimationAsset* GetAnimation() = 0; //Montage instead?
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	virtual void Execute(ABaseCharacter* Executor) = 0;
 	
 	UFUNCTION(BlueprintCallable, Category = "Event")
 	virtual UEventContainer* GetExecuteEvent() = 0;
-
-	//DECLARE_EVENT_OneParam(IAction, FExecuteEvent, ABaseCharacter*)
-	//virtual FExecuteEvent& OnExecute() = 0;
-
-	//UFUNCTION(BlueprintImplementableEvent, Category = "Action")
-	//virtual void OnExecute(ABaseCharacter* Character) = 0;
 };

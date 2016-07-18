@@ -5,16 +5,14 @@
 #include "PlayerClass.h"
 #include "Skill.h"
 
-USkill::USkill(FName SkillName, FText Description, uint8 MaxLevel, USkill* ParentSkill) {
-	this->SkillName = SkillName;
-	this->Description = Description;
-	this->MaxLevel = MaxLevel;
-	this->ParentSkill = ParentSkill;
-}
-
-USkill::~USkill() {
+USkill::USkill() {
 
 }
+
+void USkill::BeginPlay() {
+
+}
+
 
 bool USkill::CheckRequirements(ABaseCharacter* Character) {
 	bool bRightClass = Requirements.Class == NULL
@@ -26,9 +24,16 @@ bool USkill::CheckRequirements(ABaseCharacter* Character) {
 	bool bEnoughMana = Requirements.Mana <= 0 
 		|| Requirements.Mana <= Character->Mana;
 
-	//Need to change that
-	bool bHasParent = Requirements.ParentSkill != NULL
-		|| Character->GetPlayerClass()->GetSkills().Contains(Requirements.ParentSkill);
+	bool bHasParent = true;
+	if (*Requirements.ParentSkill != NULL) {
+		bHasParent = false;
+		for (USkill* Skill : Character->GetPlayerClass()->GetSkills()) {
+			if (Skill->GetClass()->IsChildOf(*Requirements.ParentSkill)) {
+				bHasParent = true;
+				break;
+			}
+		}
+	}
 
 	return bRightClass && bRightLevel && bEnoughMana && bHasParent;
 }

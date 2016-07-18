@@ -11,18 +11,12 @@ UDefaultAction::UDefaultAction() {
 }
 
 UAnimationAsset* UDefaultAction::GetAnimation() {
-	USingleton* Singleton = Cast<USingleton>(GEngine->GameSingleton);
-	//return Singleton->DefaultAnimation;
-	return NULL;
+	return nullptr;
 }
 
 void UDefaultAction::Execute(ABaseCharacter* Executor){
-	ChangeEvent->ToEvent().Broadcast(Executor);
+	ChangeEvent->Event.Broadcast(Executor, this);
 }
-
-// FExecuteEvent& UDefaultAction::OnExecute() {
-// 	return Execute;
-// }
 
 UEventContainer* UDefaultAction::GetExecuteEvent() {
 	return ChangeEvent;

@@ -12,12 +12,10 @@ UAttack::UAttack() {
 }
 
 UAnimationAsset* UAttack::GetAnimation() {
-	return (UAnimationAsset*) Animation;
+	return Animation.Get();
 }
 
 void UAttack::Execute(ABaseCharacter* Executor) {
-	//Add UPropertyComponent
-	UE_LOG(Debugg, Warning, TEXT("Lel"));
 	if (!Executor->GetMovementComponent()->IsFalling()) {
 		Executor->LaunchCharacter((Executor->GetActorForwardVector() + FVector(0, 0, 0.25)) * -3000, true, true);
 		if (GetAnimation()) {
@@ -29,11 +27,8 @@ void UAttack::Execute(ABaseCharacter* Executor) {
 			}
 		}
 	}
+	ExecuteEvent->Event.Broadcast(Executor, this);
 }
-
-// FExecuteEvent& UAttack::OnExecute() {
-// 	return Execute;
-// }
 
 UEventContainer* UAttack::GetExecuteEvent() {
 	return ExecuteEvent;

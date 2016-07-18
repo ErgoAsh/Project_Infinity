@@ -20,7 +20,7 @@ void AWeapon::TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFun
 	if (bUseDefaultTraceMethod) {
 		ABaseCharacter* Char = Cast<ABaseCharacter>(GetOwner());
 		if (Char) {
-			if (Char->Action.Attack->bAttackLeft || Char->Action.Attack->bAttackRight) {
+			if (Char->Action.CurrentAction == Char->Action.Attack) {
 				FVector Start = MeshComp->GetSocketLocation(FName(TEXT("TraceStart")));
 				FVector End = MeshComp->GetSocketLocation(FName(TEXT("TraceEnd")));
 				FHitResult Result = Trace(Start, End);

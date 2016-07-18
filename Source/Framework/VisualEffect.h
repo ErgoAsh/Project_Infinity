@@ -9,7 +9,7 @@
  * 
  */
 UCLASS(Blueprintable, BlueprintType)
-class FRAMEWORK_API UVisualEffect : public UEffect {
+class FRAMEWORK_API UVisualEffect : public UEffect { //ParticleSpawner with TArray<UEffect> variable instead?
 
 	GENERATED_BODY()
 
