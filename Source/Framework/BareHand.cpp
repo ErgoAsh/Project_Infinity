@@ -9,7 +9,7 @@ ABareHand::ABareHand() {
 	SphereCollision = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
 	SphereCollision->SetSphereRadius(35.0f);
 	SphereCollision->SetupAttachment(RootComponent);
-	bUseDefaultTraceMethod = false;
+	//bUseDefaultTraceMethod = false;
 }
 
 void ABareHand::DamageActors() {

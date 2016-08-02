@@ -10,7 +10,7 @@ UDefaultAction::UDefaultAction() {
 	ChangeEvent = NewObject<UEventContainer>();
 }
 
-UAnimationAsset* UDefaultAction::GetAnimation() {
+UAnimMontage* UDefaultAction::GetAnimation() {
 	return nullptr;
 }
 

@@ -22,13 +22,13 @@ class FRAMEWORK_API UDodge : public UObject, public IAction {
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Action")
-	TAssetPtr<UAnimSequence> Animation;
+	TAssetPtr<UAnimMontage> Animation;
 
 public:
 	UDodge();
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	UAnimationAsset* GetAnimation() override;
+	UAnimMontage* GetAnimation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;

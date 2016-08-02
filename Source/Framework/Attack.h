@@ -19,23 +19,17 @@ class FRAMEWORK_API UAttack : public UObject, public IAction {
 	UPROPERTY(VisibleAnywhere, Category = "Action")
 	UEventContainer* ExecuteEvent;
 
-protected:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Action")
-	TAssetPtr<UAnimSequence> Animation;
-
 public:
 	UAttack();
 
 	UPROPERTY(VisibleAnywhere, Category = "Action")
 	class AWeapon* HoldedWeapon;
 
-	UPROPERTY(VisibleAnywhere, Category = "Action") //Pointer?
-	FString WeaponSocket;
-
-	//Montage slot?
+	UPROPERTY(VisibleAnywhere, Category = "Action")
+	UAnimMontage* Montage;
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	UAnimationAsset* GetAnimation() override;
+	UAnimMontage* GetAnimation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;

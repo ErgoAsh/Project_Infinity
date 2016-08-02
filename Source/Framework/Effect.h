@@ -29,8 +29,9 @@ public:
 
 	virtual bool Execute_Implementation() override;
 
+	// = 0
 	UFUNCTION(BlueprintCallable, Category = "Effect")
-	virtual EEffectType GetEffectType(); //Why =0 doesn't work?
+	virtual EEffectType GetEffectType();
 
 	UFUNCTION(BlueprintCallable, Category = "Effect")
 	virtual float GetDuration() { return Duration; }

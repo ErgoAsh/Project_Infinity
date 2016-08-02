@@ -10,19 +10,18 @@ UDodge::UDodge() {
 	ExecuteEvent = NewObject<UEventContainer>();
 }
 
-UAnimationAsset* UDodge::GetAnimation() {
+UAnimMontage* UDodge::GetAnimation() {
 	return Animation.Get();
 }
 
 void UDodge::Execute(ABaseCharacter* Executor) {
 	if (!Executor->GetMovementComponent()->IsFalling()) {
-		Executor->LaunchCharacter((Executor->GetActorForwardVector() + FVector(0, 0, 0.25)) * -3000, true, true);
+		Executor->LaunchCharacter((Executor->GetActorForwardVector() + FVector(0, 0, 1)) * -3000, true, true);
 		if (GetAnimation()) {
-			UAnimSequenceBase* Sequence = Cast<UAnimSequenceBase>(GetAnimation());
-			if (Sequence) {
-				//TODO add somehow overriding animations, not additive
-				Executor->GetMesh()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(
-					Sequence, TEXT("DefaultSlot"));
+			UFrameworkAnimInstance* AnimInstance = Cast<UFrameworkAnimInstance>(Executor->GetMesh()->GetAnimInstance());
+			if (AnimInstance) {
+				AnimInstance->CurrentMontage = GetAnimation();
+				AnimInstance->Montage_Play(GetAnimation());
 			}
 		}
 	}

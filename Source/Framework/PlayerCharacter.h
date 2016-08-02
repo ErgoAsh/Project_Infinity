@@ -38,7 +38,7 @@ public:
 	float BaseLookUpRate;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
+	UPROPERTY(EditDefaultsOnly, Category = "Properties")
 	int32 MaxMoney;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Properties")
@@ -71,6 +71,12 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 	// End of APawn interface
+
+	void APlayerCharacter::LeftActionMain();
+	void APlayerCharacter::LeftActionSec();
+
+	void APlayerCharacter::RightActionMain();
+	void APlayerCharacter::RightActionSec();
 
 public:
 	/** Returns CameraBoom subobject **/

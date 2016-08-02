@@ -10,7 +10,7 @@
  * 
  */
 UCLASS(Blueprintable)
-class FRAMEWORK_API ACatalyst : public AItem {
+class FRAMEWORK_API ACatalyst : public AWeapon {
 
 	GENERATED_BODY()
 	
@@ -19,5 +19,14 @@ class FRAMEWORK_API ACatalyst : public AItem {
 public:
 	UFUNCTION(BlueprintCallable, Category = "Item")
 	bool ExecuteSpell(ABaseCharacter* Character, UActiveSkill* Spell);
-	
+// 
+// 	UFUNCTION(BlueprintCallable, Category = "Item")
+// 	virtual void UseMain(class ABaseCharacter* BaseCharacter) override;
+// 
+// 	UFUNCTION(BlueprintCallable, Category = "Item")
+// 	virtual void UseSecond(class ABaseCharacter* BaseCharacter) override;
+
+	virtual void TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
+
+
 };

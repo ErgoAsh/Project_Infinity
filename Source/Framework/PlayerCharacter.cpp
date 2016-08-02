@@ -38,9 +38,15 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 	check(InputComponent);
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
-	//InputComponent->BindAction("AttackRight", IE_Pressed, this, &ABaseCharacter::Attack);
-	//InputComponent->BindAction("AttackRight", IE_Released, this, &ABaseCharacter::AttackStop);
+	
+	// Actions
+	InputComponent->BindAction("LeftActionMain", IE_Pressed, this, &APlayerCharacter::LeftActionMain);
+	InputComponent->BindAction("LeftActionSec", IE_Pressed, this, &APlayerCharacter::LeftActionSec);
 
+	InputComponent->BindAction("RightActionMain", IE_Pressed, this, &APlayerCharacter::RightActionMain);
+	InputComponent->BindAction("RightActionSec", IE_Pressed, this, &APlayerCharacter::RightActionSec);
+
+	// Movement
 	InputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	InputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
 
@@ -52,7 +58,7 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* InputCom
 	InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	InputComponent->BindAxis("LookUpRate", this, &APlayerCharacter::LookUpAtRate);
 
-	// handle touch devices
+	// Handle touch devices
 	InputComponent->BindTouch(IE_Pressed, this, &APlayerCharacter::TouchStarted);
 	InputComponent->BindTouch(IE_Released, this, &APlayerCharacter::TouchStopped);
 }
@@ -104,5 +110,48 @@ void APlayerCharacter::MoveRight(float Value) {
 
 		// add movement in that direction
 		AddMovementInput(Direction, GetMovementComponent()->IsFlying() ? Value / 2 : Value);
+	}
+}
+
+void APlayerCharacter::LeftActionMain() {
+	AItem* Item = InventoryComponent->Get(5);
+	if (Item == nullptr) {
+		BeginAction(5, true);
+		return;
+	}
+	ACatalyst* Catalyst = Cast<ACatalyst>(Item);
+	if (Catalyst) {
+		//TODO activate spell choosing widget
+		//TODO add some bool to check is choosing spell
+	} else {
+		BeginAction(5, true);
+	}
+}
+void APlayerCharacter::LeftActionSec() {
+	AItem* Item = InventoryComponent->Get(5);
+	if (Item == nullptr) {
+		BeginAction(5, true);
+	}
+}
+void APlayerCharacter::RightActionMain() {
+	AItem* Item = InventoryComponent->Get(5);
+	if (Item == nullptr) {
+		BeginAction(6, true);
+		return;
+	}
+	ACatalyst* Catalyst = Cast<ACatalyst>(Item);
+	if (Catalyst) {
+		//TODO activate spell choosing widget
+		//TODO add some bool to check is choosing spell
+	}
+	else {
+		BeginAction(6, true);
+	}
+}
+
+void APlayerCharacter::RightActionSec() {
+	AItem* Item = InventoryComponent->Get(5);
+	if (Item == nullptr) {
+		BeginAction(6, true);
 	}
 }

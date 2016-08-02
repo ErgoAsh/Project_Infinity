@@ -22,5 +22,4 @@ public:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Game")
 	UDataTable* EffectData;
-	
 };

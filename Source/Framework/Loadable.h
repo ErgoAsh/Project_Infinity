@@ -8,7 +8,7 @@
 /**
  * 
  */
-UINTERFACE(Blueprintable)
+UINTERFACE(Blueprintable) //Delete?
 class ULoadable : public UInterface {
 
 	GENERATED_UINTERFACE_BODY()

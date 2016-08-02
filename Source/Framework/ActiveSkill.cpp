@@ -3,13 +3,14 @@
 #include "Framework.h"
 #include "ActiveSkill.h"
 #include "Animation/SkeletalMeshActor.h"
+#include "FrameworkAnimInstance.h"
 #include "Engine.h"
 
 UActiveSkill::UActiveSkill() {
 	ExecuteEvent = NewObject<UEventContainer>();
 }
 
-UAnimationAsset* UActiveSkill::GetAnimation() {
+UAnimMontage* UActiveSkill::GetAnimation() {
 	return Animation.Get();
 }
 
@@ -20,21 +21,15 @@ TArray<UEffect*> UActiveSkill::GetConsequences() {
 void UActiveSkill::Execute(ABaseCharacter* Executor) {
 	if (Executor) {
 		if (GetAnimation()) {
-			UAnimSequenceBase* Sequence = Cast<UAnimSequenceBase>(GetAnimation());
-			if (Sequence) {
-				//TODO add somehow overriding animations, not additive
-				Executor->GetMesh()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(
-					Sequence, TEXT("DefaultSlot"));
+			UFrameworkAnimInstance* AnimInstance = Cast<UFrameworkAnimInstance>(Executor->GetMesh()->GetAnimInstance());
+			if (AnimInstance) {
+				AnimInstance->CurrentMontage = GetAnimation();
+				AnimInstance->Montage_Play(GetAnimation());
 			}
 		}
 	}
 	ExecuteEvent->Event.Broadcast(Executor, this);
-	//TODO wait for sth and broadcast ExecuteEndEvent
 }
-
-// FExecuteEvent& UActiveSkill::OnExecute() {
-// 	return Execute;
-// }
 
 UEventContainer* UActiveSkill::GetExecuteEvent() {
 	return ExecuteEvent;

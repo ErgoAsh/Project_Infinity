@@ -11,23 +11,20 @@ UAttack::UAttack() {
 	ExecuteEvent = NewObject<UEventContainer>();
 }
 
-UAnimationAsset* UAttack::GetAnimation() {
-	return Animation.Get();
+UAnimMontage* UAttack::GetAnimation() {
+	return Montage;
 }
 
 void UAttack::Execute(ABaseCharacter* Executor) {
-	if (!Executor->GetMovementComponent()->IsFalling()) {
-		Executor->LaunchCharacter((Executor->GetActorForwardVector() + FVector(0, 0, 0.25)) * -3000, true, true);
-		if (GetAnimation()) {
-			UAnimSequenceBase* Sequence = Cast<UAnimSequenceBase>(GetAnimation());
-			if (Sequence) {
-				//TODO add somehow overriding animations, not additive
-				Executor->GetMesh()->GetAnimInstance()->PlaySlotAnimationAsDynamicMontage(
-					Sequence, TEXT("DefaultSlot"));
+	if (GetAnimation()) {
+		UFrameworkAnimInstance* AnimInstance = Cast<UFrameworkAnimInstance>(Executor->GetMesh()->GetAnimInstance());
+		if (AnimInstance) {
+			if (!AnimInstance->IsFalling()) {
+				AnimInstance->Montage_Play(GetAnimation());
+				ExecuteEvent->Event.Broadcast(Executor, this);
 			}
 		}
 	}
-	ExecuteEvent->Event.Broadcast(Executor, this);
 }
 
 UEventContainer* UAttack::GetExecuteEvent() {

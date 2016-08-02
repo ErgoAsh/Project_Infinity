@@ -3,6 +3,7 @@
 #include "Framework.h"
 #include "Engine.h"
 #include "FrameworkLibrary.h"
+#include <string>
 
 UFrameworkLibrary::UFrameworkLibrary() {
 }
@@ -22,4 +23,9 @@ UObject* UFrameworkLibrary::CreateObject(UObject* WorldContextObject, UClass* Ba
 	UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject);
 	UObject* CreatedObject = NewObject<UObject>(BaseClass);
 	return CreatedObject;
+}
+
+FString UFrameworkLibrary::ToString(uint8 Number) {
+	std::string s = std::to_string(Number);
+	return FString(s.c_str());
 }

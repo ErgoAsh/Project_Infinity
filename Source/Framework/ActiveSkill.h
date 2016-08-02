@@ -5,8 +5,9 @@
 #include "Skill.h"
 #include "Action.h"
 #include "Animation/AnimInstance.h"
-#include "BaseCharacter.h"
 #include "ActiveSkill.generated.h"
+
+class ABaseCharacter;
 
 /**
  * 
@@ -24,10 +25,13 @@ class FRAMEWORK_API UActiveSkill : public USkill, public IAction {
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
-	TAssetPtr<UAnimationAsset> Animation;
+	TAssetPtr<UAnimMontage> Animation;
 
 public:
 	UActiveSkill();
+
+	UPROPERTY(VisibleAnywhere, Category = "Skill")
+	uint8 InventorySlot;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Skill")
 	uint8 ManaCost;
@@ -42,7 +46,7 @@ public:
 	virtual void Execute(ABaseCharacter* Executor) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Skill")
-	virtual UAnimationAsset* GetAnimation() override;
+	virtual UAnimMontage* GetAnimation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Event")
 	UEventContainer* GetExecuteEvent() override;

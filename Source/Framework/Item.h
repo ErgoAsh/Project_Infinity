@@ -7,7 +7,6 @@
 #include "Item.generated.h"
 
 
-
 UENUM(BlueprintType)
 enum class EItemType : uint8 {
 	OTHER UMETA(DisplayName = "Other"),
@@ -19,72 +18,188 @@ enum class EItemType : uint8 {
 	TOOL UMETA(DisplayName = "Tool")
 };
 
-USTRUCT(Blueprintable) 
-struct FItemType : public FTableRowBase {
+USTRUCT(Blueprintable)
+struct FItemDamage : public FTableRowBase {
 
 	GENERATED_USTRUCT_BODY()
 
-	FItemType()
-	  : Name(FName(TEXT("NULL"))),
-		Type(0),
-		Description(TEXT("DefaultItem")),
+	FItemDamage()
+	  : MaxCombo(3),
+		Pierce(0),
+		Slash(1),
+		Blunt(0),
+		Magic(0),
+		Dark(0),
+		Fire(0),
+		Ice(0),
+		Lightning(0),
+		Mind(0),
+		Poise(5),
+		CriticalMultiplier(2),
+		CounterMultiplier(1),
+		Stability(100) {};
+
+	UPROPERTY(VisibleAnywhere)
+	uint8 MaxCombo;
+
+	UPROPERTY(VisibleAnywhere)
+	float Pierce;
+
+	UPROPERTY(VisibleAnywhere)
+	float Slash;
+
+	UPROPERTY(VisibleAnywhere)
+	float Blunt;
+
+	UPROPERTY(VisibleAnywhere)
+	float Magic;
+
+	UPROPERTY(VisibleAnywhere)
+	float Dark;
+
+	UPROPERTY(VisibleAnywhere)
+	float Fire;
+
+	UPROPERTY(VisibleAnywhere)
+	float Ice;
+
+	UPROPERTY(VisibleAnywhere)
+	float Lightning;
+
+	UPROPERTY(VisibleAnywhere)
+	float Mind;
+
+	UPROPERTY(VisibleAnywhere)
+	float Poise;
+
+	UPROPERTY(VisibleAnywhere)
+	float CriticalMultiplier;
+
+	UPROPERTY(VisibleAnywhere)
+	float CounterMultiplier;
+
+	UPROPERTY(VisibleAnywhere)
+	float BlockMultiplier;
+
+	UPROPERTY(VisibleAnywhere)
+	float Stability;
+};
+
+USTRUCT(Blueprintable)
+struct FItemDefense : public FTableRowBase {
+
+	GENERATED_USTRUCT_BODY()
+
+	FItemDefense()
+	  : Piercing(0),
+		Slash(0),
+		Blunt(0),
+		Magic(0),
+		Dark(0),
+		Fire(0),
+		Ice(0),
+		Lightning(0),
+		Mind(0),
+		Poise(5) {};
+
+	UPROPERTY(VisibleAnywhere)
+	uint8 MaxCombo;
+
+	UPROPERTY(VisibleAnywhere)
+	float Piercing;
+
+	UPROPERTY(VisibleAnywhere)
+	float Slash;
+
+	UPROPERTY(VisibleAnywhere)
+	float Blunt;
+
+	UPROPERTY(VisibleAnywhere)
+	float Magic;
+
+	UPROPERTY(VisibleAnywhere)
+	float Dark;
+
+	UPROPERTY(VisibleAnywhere)
+	float Fire;
+
+	UPROPERTY(VisibleAnywhere)
+	float Ice;
+
+	UPROPERTY(VisibleAnywhere)
+	float Lightning;
+
+	UPROPERTY(VisibleAnywhere)
+	float Mind;
+
+	UPROPERTY(VisibleAnywhere)
+	float Poise;
+};
+
+USTRUCT(Blueprintable) 
+struct FItemData : public FTableRowBase {
+
+	GENERATED_USTRUCT_BODY()
+
+	FItemData()
+	  : ID(0),
+		Name(FName(TEXT("NULL"))),
+		Type(EItemType::OTHER),
+		Class(FString(TEXT("ALL"))),
+		Level(0),
+		MaxDurability(100),
+		MaxAmountPerStack(1),
+		MaxStacksPerInventory(8),
 		bCanStack(false),
-		Damage(0),
-		Durability(100) {};
+		Description(TEXT("Default item, use with caution")) {};
 
-	EItemType GetType() {
-		switch (Type) {
-		case 0: return EItemType::OTHER;
-		case 1: return EItemType::USEABLE;
-		case 2: return EItemType::WEAPON;
-		case 3: return EItemType::CATALYST;
-		case 4: return EItemType::ARMOR;
-		case 5: return EItemType::MATERIAL;
-		case 6: return EItemType::TOOL;
+	UPROPERTY(VisibleAnywhere)
+	int32 ID;
 
-		default: return EItemType::OTHER;
-		}
-	}
-
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	uint8 ID;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleAnywhere)
 	FName Name;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	uint8 Type;
+	UPROPERTY(VisibleAnywhere)
+	EItemType Type;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	FString Description;
+	UPROPERTY(VisibleAnywhere)
+	FString Class; //HACK FName?
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	FString Class;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	bool bCanStack;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleAnywhere)
 	uint8 Level;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	uint8 ItemType;
+	UPROPERTY(VisibleAnywhere)
+	float MaxDurability;
+	
+	UPROPERTY(VisibleAnywhere)
+	uint8 MaxAmountPerStack;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	float Damage;
+	UPROPERTY(VisibleAnywhere)
+	uint8 MaxStacksPerInventory;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	float Durability;
+	UPROPERTY(VisibleAnywhere)
+	bool bCanStack;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleAnywhere)
+	FString Description;
+
+	UPROPERTY(VisibleAnywhere)
 	TAssetPtr<UTexture2D> Icon;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
+	UPROPERTY(VisibleAnywhere)
 	TAssetPtr<UStaticMesh> Model;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Item")
-	TAssetPtr<UAnimationAsset> Animation;
+	UPROPERTY(VisibleAnywhere)
+	TAssetPtr<UAnimMontage> MainAnim;
 
+	UPROPERTY(VisibleAnywhere)
+	TAssetPtr<UAnimMontage> SecondAnim;
+
+	UPROPERTY(VisibleAnywhere)
+	FItemDamage Damage;
+
+	UPROPERTY(VisibleAnywhere)
+	FItemDefense Defense;
 };
 
 /**
@@ -96,36 +211,42 @@ class FRAMEWORK_API AItem : public AActor {
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	FItemType ItemData;
+	uint8 Amount = 1;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	bool bIsCollectable = true;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
+	int32 ID;
+
+	UPROPERTY(EditAnywhere, Category = "Item")
 	USphereComponent* Sphere;
 
-	UPROPERTY(VisibleAnywhere, Category = "Item")
-	uint8 Amount;
-
-public:
-	AItem() : AItem(FItemType()) {};
-	AItem(FItemType Data);
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Item")
+	UPROPERTY(EditAnywhere, Category = "Item")
 	UStaticMeshComponent* MeshComp;
 
-	//TODO delete
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
-	EItemType ItemType;
+public:
+	AItem();
 
-	//TODO delete
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
-	bool bPickAble = true;
+	FItemData* GetItemData();
 
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	FItemType& GetItemData() { return ItemData; }
-
-	UFUNCTION(BlueprintCallable, Category = "Item")
-	uint8 GetItemAmount() { return Amount; }
+	uint8 GetAmount() { return Amount; }
 
 	//TODO add network authority
 	UFUNCTION(BlueprintCallable, Category = "Item")
-	void SetItemAmount(uint8 NewAmount) { Amount = NewAmount; }
+	void SetAmount(uint8 NewAmount) { Amount = NewAmount; }
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void DestroyMesh() { MeshComp->DestroyComponent(false); } //HACK, or true?
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	void SetMeshComponent(UStaticMeshComponent* Component) { MeshComp = Component; }
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	bool IsCollectable() const { return bIsCollectable; }
+
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	FORCEINLINE int32 GetID() const { return ID; }
 };

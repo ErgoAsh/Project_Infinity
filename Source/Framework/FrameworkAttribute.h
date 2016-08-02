@@ -12,73 +12,72 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAttributeModify, UFrameworkAttrib
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType) //TODO add template?
 class FRAMEWORK_API UFrameworkAttribute : public UObject {
 
 	GENERATED_BODY()
 
-	//Should be deleted or changed to Destination?
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
-	FName Name;
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
+	FName Type;
 
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	float BaseValue = 0;
 
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	float Value;
 
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	bool bIsMinimumValueSet;
 
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	bool bIsMaximumValueSet;
 
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	float MinimumValue;
 
-	UPROPERTY(VisibleAnywhere, Category = "Properties")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	float MaximumValue;
 
-	UPROPERTY(VisibleAnywhere, Category = "PropPropertieserty")
+	UPROPERTY(VisibleAnywhere, Category = "Attribute")
 	TArray<FModifier> Modifiers;
 	
 public:
-	UFUNCTION(BlueprintCallable, Category = "Properties")
-	FName GetName() const { return Name; }
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
+	FName GetType() const { return Type; }
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
-	float GetValue() { return Value; }
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
+	float GetValue() const { return Value; }
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
-	float GetBaseValue() { return BaseValue; }
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
+	float GetBaseValue() const { return BaseValue; }
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	void SetBaseValue(float NewValue);
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	void SetMinimumValue(float Minimal);
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	void SetMaximumValue(float Maximum);
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
-	void SetName(FName& NewName) { Name = NewName; }
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
+	void SetType(FName& NewType) { Type = NewType; }
 	
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	void AddModifier(FModifier& Modifier);
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
-	bool AddIfNotExist(FModifier& Modifier);
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
+	bool AddIfNotExist(FModifier& Modifier); //TODO delete/refactor
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	void RemoveModifier(FModifier& Modifier);
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	void ClearModifiers();
 
-	UFUNCTION(BlueprintCallable, Category = "Properties")
+	UFUNCTION(BlueprintCallable, Category = "Attribute")
 	TArray<FModifier> GetModifiers() { return Modifiers; }
 
-	UFUNCTION(Category = "Properties")
+	UFUNCTION(Category = "Attribute")
 	void Update();
 };

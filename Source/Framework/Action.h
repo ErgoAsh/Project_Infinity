@@ -19,10 +19,10 @@ class UEventContainer : public UObject {
 public:
 	UEventContainer() {}
 
-	UPROPERTY(BlueprintAssignable, Category = "Event")
+	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "Event")
 	FOnExecuteEvent Event;
 
-	UPROPERTY(BlueprintAssignable, Category = "Event")
+	UPROPERTY(BlueprintCallable, BlueprintAssignable, Category = "Event")
 	FOnExecuteEndEvent EndEvent;
 };
 
@@ -43,7 +43,7 @@ class FRAMEWORK_API IAction {
 public:
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	virtual UAnimationAsset* GetAnimation() = 0; //Montage instead?
+	virtual UAnimMontage* GetAnimation() = 0;
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	virtual void Execute(ABaseCharacter* Executor) = 0;

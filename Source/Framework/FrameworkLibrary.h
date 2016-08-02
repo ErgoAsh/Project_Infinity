@@ -19,7 +19,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Framework")
 	static USingleton* GetSignleton(bool& IsValid);
-	
+
 	UFUNCTION(BlueprintPure, meta = (HidePin = "WorldContextObject", DefaultToSelf = "WorldContextObject", DisplayName = "Create Object from Blueprint", CompactNodeTitle = "Create", Keywords = "new create blueprint"), Category = Game)
 	static UObject* CreateObject(UObject* WorldContextObject, UClass* BaseClass);
+
+	UFUNCTION()
+	static FString ToString(uint8 Number);
 };

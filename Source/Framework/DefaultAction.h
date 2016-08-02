@@ -23,7 +23,7 @@ public:
 	UDefaultAction();
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
-	UAnimationAsset* GetAnimation() override;
+	UAnimMontage* GetAnimation() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Execute(ABaseCharacter* Executor) override;

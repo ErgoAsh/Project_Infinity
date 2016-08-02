@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class FRAMEWORK_API ABareHand : public AWeapon {
+class FRAMEWORK_API ABareHand : public AWeapon { //TODO delete
 
 	GENERATED_BODY()
 

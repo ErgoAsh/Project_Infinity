@@ -8,23 +8,31 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class FRAMEWORK_API AWeapon : public AItem {
 
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, Category = "Item")
-	float Damage;
+	bool bUseDefaultTraceMethod;
+
+	UPROPERTY(VisibleAnywhere, Category = "Item")
+	bool bCanTick;
+
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Item")
+	FHitResult Trace(const FVector& StartTrace, const FVector& EndTrace);
 
 public:
 	AWeapon();
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Item")
-	bool bUseDefaultTraceMethod;
+// 	UFUNCTION(BlueprintCallable, Category = "Item") //TODO where to use?
+// 	virtual void UseMain(class ABaseCharacter* BaseCharacter);
+// 
+// 	UFUNCTION(BlueprintCallable, Category = "Item")
+// 	virtual void UseSecond(class ABaseCharacter* BaseCharacter);
 
-	UFUNCTION(BlueprintCallable, Category = "Item")
-	FHitResult Trace(const FVector& StartTrace, const FVector& EndTrace);
+	virtual void TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
 
-	void TickActor(float DeltaTime, enum ELevelTick TickType, FActorTickFunction& ThisTickFunction) override;
-
+	void SetCanTick(bool CanTick) { bCanTick = CanTick; }
 };

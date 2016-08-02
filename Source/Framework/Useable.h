@@ -18,7 +18,7 @@ enum class EUseableType : uint8 {
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable)
 class FRAMEWORK_API AUseable : public AItem {
 
 	GENERATED_BODY()
@@ -34,9 +34,11 @@ public:
 
 	//TODO refactor Item.h structure, then think about this method
 	//UFUNCTION(BlueprintCallable, Category = "Item")	
-	//UAnimationAsset* GetAnimation();
+	//UAnimMontage* GetAnimation();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Item")
 	void Use(ABaseCharacter* Character);
 	void Use_Implementation(ABaseCharacter* Character);
+
+	//BluprintImplementable?
 };

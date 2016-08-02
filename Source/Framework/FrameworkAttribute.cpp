@@ -9,7 +9,6 @@ void UFrameworkAttribute::AddModifier(FModifier& Modifier) {
 	Update();
 }
 
-
 bool UFrameworkAttribute::AddIfNotExist(FModifier& Modifier) {
 	if (!Modifiers.Contains(Modifier)) {
 		Modifiers.Add(Modifier);

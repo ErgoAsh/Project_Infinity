@@ -19,10 +19,10 @@ bool USkill::CheckRequirements(ABaseCharacter* Character) {
 		|| (Requirements.Class != NULL && Requirements.Class == Character->GetPlayerClass());
 
 	bool bRightLevel = Requirements.Level <= 0 
-		|| Requirements.Level <= Character->Level;
+		|| Requirements.Level <= Character->GetLevel();
 
-	bool bEnoughMana = Requirements.Mana <= 0 
-		|| Requirements.Mana <= Character->Mana;
+	bool bEnoughMana = Requirements.Mana <= 0
+		|| Requirements.Mana <= Character->GetMana();
 
 	bool bHasParent = true;
 	if (*Requirements.ParentSkill != NULL) {

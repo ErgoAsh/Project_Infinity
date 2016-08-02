@@ -7,18 +7,7 @@
 #include "Item.h"
 #include "InventoryComponent.generated.h"
 
-UENUM(BlueprintType)
-enum class EInventoryContainerSlot : uint8 {
-	LEFT_HAND UMETA(DisplayName = "Left Hand"),
-	RIGHT_HAND UMETA(DisplayName = "Right Hand"),
-	HELMET UMETA(DisplayName = "Helmet"),
-	CHESTPLATE UMETA(DisplayName = "Chestplate"),
-	LEGGINGS UMETA(DisplayName = "Leggings"),
-	BOOTS UMETA(DisplayName = "Boots"),
-	NONE
-};
-
-USTRUCT()
+USTRUCT(Blueprintable, BlueprintType)
 struct FEquipment {
 
 	GENERATED_USTRUCT_BODY()
@@ -43,7 +32,7 @@ struct FEquipment {
 
 };
 
-UCLASS(BlueprintType, meta=(BlueprintSpawnableComponent))
+UCLASS(Blueprintable, BlueprintType, meta=(BlueprintSpawnableComponent))
 class FRAMEWORK_API UInventoryComponent : public UActorComponent {
 
 	GENERATED_BODY()
@@ -60,22 +49,22 @@ class FRAMEWORK_API UInventoryComponent : public UActorComponent {
 	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	FEquipment Equipment;
 
-	UPROPERTY(VisibleAnywhere, Category = "Inventory")
-	AWeapon* LeftHandItem;
+protected:
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	AItem* GetItem(uint8 Index);
 
-	UPROPERTY(VisibleAnywhere, Category = "Inventory")
-	AWeapon* RightHandItem;
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void Clear();
 
-	//TODO delete it when the Inventory UI will be done
-	UStaticMesh* StaticMeshLel;
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void RemoveFromArray(uint8 Index);
+
+	virtual void BeginPlay() override;
+	virtual void OnRegister() override;
 
 public:	
 	UInventoryComponent() : UInventoryComponent(FEquipment()) {};
 	UInventoryComponent(FEquipment Load);
-
-	virtual void BeginPlay() override;
-
-	virtual void OnRegister() override;
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
 	void InitializeCollision(UShapeComponent* Shape);
@@ -84,22 +73,38 @@ public:
 	void InitializeInput(UInputComponent* Shape);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
-	void OnComponentOverlap(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult & SweepResult);
+	void OnComponentOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION(meta = (BlueprintInternalUseOnly), Category = "Inventory")
-	void OnComponentEndOverlap(class AActor * OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	void OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 	//////////////////////////////////////////////////////////////////////////
-	// Equipment
+	// Equipment - override if more limbs
+
+	/**
+	 * @param Slot
+	 *	1: Helmet
+	 *	2: Chestplate
+	 *	3: Leggings
+	 *	4: Boots
+	 *	5: Left hand
+	 *	6: Right hand
+	 * @returns item in specific slot
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	virtual AItem* Get(uint8 Slot);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	AItem* Get(EInventoryContainerSlot ItemSlot);
+	virtual uint8 GetSlot(AItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool Set(EInventoryContainerSlot ItemSlot, AItem* Item);
+	virtual bool Set(uint8 Slot, AItem* Item);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool Remove(EInventoryContainerSlot ItemSlot);
+	virtual bool Remove(uint8 Slot);
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	virtual bool TryRemove(AItem* Item);
 
 	//////////////////////////////////////////////////////////////////////////
 	// Inventory
@@ -121,14 +126,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	TArray<AItem*> GetItemsByType(EItemType ItemType);
-
-private:
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	AItem* GetItem(uint8 Index);
-
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool Delete(AItem* Item);
-
-	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void Clear();
 };

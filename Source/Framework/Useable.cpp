@@ -3,7 +3,9 @@
 #include "Framework.h"
 #include "Useable.h"
 
-AUseable::AUseable() {}
+AUseable::AUseable() {
+	bIsCollectable = false;
+}
 
 //TODO fix networking authority
 void AUseable::Use_Implementation(ABaseCharacter* Character) {
