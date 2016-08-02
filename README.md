@@ -1,10 +1,4 @@
-# Project_Infinity
-RPG project made in UnrealEngine
+# Project_Infinity 
+RPG project made in UnrealEngine (temporary name)
 
-===Quick to do list:===
-* Add BareHand.CPP
-* Add PlayerClass (it disappeared, lel)
-* Add IMultiEventContainer with list, IEventContainer with a single event
-* Add Framework and Framework gamemode
-* Make PlayerClass extend IMultiEventContainer and register/set events using FrameworkGameMode
-* Learn replication and use it
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
